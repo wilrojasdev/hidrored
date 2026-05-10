@@ -136,19 +136,26 @@ jobs:
           if (-not $installPath) {
             throw "No se pudo determinar la ruta de Visual Studio"
           }
+
+          # Visual Studio 2022 expone las CRT en
+          #   <VS>\VC\Redist\MSVC\<version>\x64\Microsoft.VC<NNN>.CRT\
+          # Pero al lado existe un alias sin x64 (p. ej. "v143") que no
+          # contiene DLLs. En vez de razonar sobre versiones, buscamos
+          # recursivamente cualquier Microsoft.VC*.CRT que esté bajo x64.
           $redistRoot = Join-Path $installPath "VC\Redist\MSVC"
-          $latestVersion = Get-ChildItem -Path $redistRoot -Directory |
-            Sort-Object Name -Descending |
-            Select-Object -First 1
-          if (-not $latestVersion) {
-            throw "No se encontró el directorio de redistribuibles MSVC"
+          if (-not (Test-Path $redistRoot)) {
+            throw "No existe $redistRoot — Visual Studio sin componente VC redistributable"
           }
-          $crtFolder = Get-ChildItem -Path (Join-Path $latestVersion.FullName "x64") `
-            -Directory -Filter "Microsoft.VC*.CRT" |
-            Select-Object -First 1
-          if (-not $crtFolder) {
-            throw "No se encontró la carpeta CRT (Microsoft.VC*.CRT)"
+          $crtCandidates = Get-ChildItem -Path $redistRoot -Recurse -Directory `
+              -Filter "Microsoft.VC*.CRT" -ErrorAction SilentlyContinue |
+            Where-Object { $_.FullName -match '\\x64\\' }
+          if (-not $crtCandidates) {
+            throw "No se encontró ninguna carpeta Microsoft.VC*.CRT bajo $redistRoot\*\x64"
           }
+          # Elegir el path con la versión más alta (orden lexicográfico
+          # descendente del FullName funciona bien porque la versión va
+          # numéricamente: 14.40.x > 14.30.x).
+          $crtFolder = $crtCandidates | Sort-Object FullName -Descending | Select-Object -First 1
           Write-Host "Copiando CRT desde: $($crtFolder.FullName)"
           Copy-Item -Path "$($crtFolder.FullName)\*.dll" -Destination $release -Force
           Write-Host "DLLs incluidas en el bundle:"
