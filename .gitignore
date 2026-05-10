@@ -1,0 +1,84 @@
+# ----- Sistema -----
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ----- Editores -----
+.idea/
+.vscode/
+*.iml
+.history/
+
+# ----- Flutter / Dart -----
+**/.dart_tool/
+**/.packages
+**/.pub-cache/
+**/.pub/
+**/build/
+**/pubspec.lock
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/generated_plugin_registrant.*
+**/Generated.xcconfig
+**/Flutter/Generated.xcconfig
+**/Flutter/flutter_export_environment.sh
+**/Flutter/flutter_assets/
+**/ios/Pods/
+**/macos/Pods/
+**/ios/.symlinks/
+**/macos/.symlinks/
+**/android/.gradle/
+**/android/captures/
+**/android/local.properties
+**/android/app/release/
+**/android/app/profile/
+**/android/app/debug/
+**/android/key.properties
+**/*.jks
+**/*.keystore
+
+# Drift (DB local)
+**/*.g.dart.bak
+**/*.drift.dart.bak
+
+# ----- fvm -----
+.fvm/flutter_sdk
+.fvm/versions
+
+# ----- Supabase -----
+supabase/.branches
+supabase/.temp
+supabase/.env
+# Seeds reales (PII de clientes, cuentas bancarias, etc.) por DEFECTO ignorados.
+# Whitelist solo de plantillas y placeholders. Cualquier seed nuevo
+# se mantiene fuera del repo a menos que se whitelistee explícitamente.
+supabase/seed/*
+!supabase/seed/.gitkeep
+!supabase/seed/_template.sql
+!supabase/seed/README.md
+
+# ----- Variables de entorno -----
+.env
+.env.*
+!.env.example
+
+# ----- Scripts locales con credenciales -----
+scripts/run_*.sh
+scripts/run_*.ps1
+!scripts/run_*.example
+
+# ----- Logs y caches -----
+*.log
+logs/
+coverage/
+.coverage
+.nyc_output/
+
+# ----- Builds finales -----
+*.apk
+*.aab
+*.exe
+*.msix
+*.dmg
+release-artifacts/

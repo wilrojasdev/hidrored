@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Plantilla para correr la app en macOS con el backend Supabase.
+# Cópiala como `run_macos.sh` (sin .example) y reemplaza las variables.
+# El script real (run_macos.sh) está en .gitignore.
+
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+FLUTTER="$REPO_ROOT/.fvm/flutter_sdk/bin/flutter"
+
+if [[ ! -x "$FLUTTER" ]]; then
+  echo "Error: no encuentro la SDK de Flutter pinneada en:"
+  echo "  $FLUTTER"
+  echo
+  echo "Ejecuta primero desde la raíz del repo:"
+  echo "  fvm install stable && fvm use stable --force"
+  exit 1
+fi
+
+# ─── Edita estos valores ──────────────────────────────────────────────────
+SUPABASE_URL="https://xxxxxxxxxx.supabase.co"
+SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIs..."
+# POWERSYNC_URL="https://xxxx.powersync.journeyapps.com"  # opcional
+# ──────────────────────────────────────────────────────────────────────────
+
+cd "$REPO_ROOT/app"
+
+echo "Usando Flutter:"
+"$FLUTTER" --version | head -2
+echo
+
+"$FLUTTER" run -d macos \
+  --dart-define=SUPABASE_URL="$SUPABASE_URL" \
+  --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY"
+  # --dart-define=POWERSYNC_URL="$POWERSYNC_URL"

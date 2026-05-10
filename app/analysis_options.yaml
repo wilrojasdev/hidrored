@@ -1,0 +1,30 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  plugins:
+    - custom_lint
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/*.drift.dart"
+    - "build/**"
+  errors:
+    # freezed pone @JsonKey en parametros del factory; el analizador lo
+    # reporta como invalido aunque el codegen lo procesa bien.
+    invalid_annotation_target: ignore
+    # build_runner usa un analyzer mas antiguo que no soporta `?key: value`
+    # en mapas, asi que mantenemos `if (x != null)` y silenciamos el lint.
+    use_null_aware_elements: ignore
+    # `print` filtra info en logs y no respeta release mode. Usar appLogger
+    # del core/logging. Romper build si alguien introduce `print`.
+    avoid_print: error
+
+linter:
+  rules:
+    prefer_single_quotes: true
+    prefer_const_constructors: true
+    prefer_const_literals_to_create_immutables: true
+    avoid_print: true
+    require_trailing_commas: true
+    sort_child_properties_last: true
+    use_key_in_widget_constructors: true

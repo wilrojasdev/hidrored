@@ -1,0 +1,243 @@
+name: Build artefactos
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  release:
+    types: [published]
+
+env:
+  FLUTTER_VERSION: '3.41.9'
+  FLUTTER_CHANNEL: 'stable'
+
+jobs:
+  # =========================================================================
+  # Analisis y tests (rapido, bloquea el resto si falla)
+  # =========================================================================
+  analyze:
+    name: Analisis estatico y tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Instalar dependencias
+        run: flutter pub get
+
+      - name: Verificar formato
+        run: dart format --set-exit-if-changed .
+
+      - name: Analisis estatico
+        run: flutter analyze
+
+      - name: Tests
+        run: flutter test
+
+  # =========================================================================
+  # Build Android APK release (sin firmar)
+  # =========================================================================
+  build-android:
+    name: Build APK release (sin firmar)
+    needs: analyze
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Instalar dependencias
+        run: flutter pub get
+
+      - name: Build APK release
+        run: |
+          flutter build apk --release \
+            --dart-define=SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
+            --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+
+      - name: Renombrar APK
+        run: |
+          mkdir -p ../release-artifacts
+          cp build/app/outputs/flutter-apk/app-release.apk \
+             ../release-artifacts/hidrored-${{ github.sha }}.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hidrored-android-apk
+          path: release-artifacts/hidrored-*.apk
+          retention-days: 30
+
+  # =========================================================================
+  # Build Windows .exe (sin firmar, empaquetado en zip)
+  # =========================================================================
+  build-windows:
+    name: Build Windows release (sin firmar)
+    needs: analyze
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Habilitar desktop Windows
+        run: flutter config --enable-windows-desktop
+
+      - name: Instalar dependencias
+        run: flutter pub get
+
+      - name: Build Windows release
+        run: |
+          flutter build windows --release `
+            --dart-define=SUPABASE_URL=${{ secrets.SUPABASE_URL }} `
+            --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+
+      # Flutter Windows depende de las CRT de Visual C++. Sin estas DLLs el
+      # .exe falla en máquinas que no tengan instalado el "Visual C++
+      # Redistributable 2015-2022". Las copiamos al lado del exe para que el
+      # zip funcione standalone en cualquier Windows 10/11 x64.
+      - name: Copiar DLLs de Visual C++ Runtime
+        shell: pwsh
+        run: |
+          $release = "build/windows/x64/runner/Release"
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          if (-not (Test-Path $vswhere)) {
+            throw "vswhere.exe no encontrado en el runner"
+          }
+          $installPath = & $vswhere -latest -property installationPath
+          if (-not $installPath) {
+            throw "No se pudo determinar la ruta de Visual Studio"
+          }
+          $redistRoot = Join-Path $installPath "VC\Redist\MSVC"
+          $latestVersion = Get-ChildItem -Path $redistRoot -Directory |
+            Sort-Object Name -Descending |
+            Select-Object -First 1
+          if (-not $latestVersion) {
+            throw "No se encontró el directorio de redistribuibles MSVC"
+          }
+          $crtFolder = Get-ChildItem -Path (Join-Path $latestVersion.FullName "x64") `
+            -Directory -Filter "Microsoft.VC*.CRT" |
+            Select-Object -First 1
+          if (-not $crtFolder) {
+            throw "No se encontró la carpeta CRT (Microsoft.VC*.CRT)"
+          }
+          Write-Host "Copiando CRT desde: $($crtFolder.FullName)"
+          Copy-Item -Path "$($crtFolder.FullName)\*.dll" -Destination $release -Force
+          Write-Host "DLLs incluidas en el bundle:"
+          Get-ChildItem -Path $release -Filter "*.dll" |
+            Where-Object { $_.Name -match "^(msvcp|vcruntime|concrt)" } |
+            ForEach-Object { Write-Host "  - $($_.Name)" }
+
+      # Verificación rápida: lista todo lo que entrará al zip para auditar
+      # en logs si algo se cuela o se pierde.
+      - name: Inventariar paquete final
+        shell: pwsh
+        run: |
+          $release = "build/windows/x64/runner/Release"
+          Write-Host "=== Contenido de $release ==="
+          Get-ChildItem -Path $release -Recurse |
+            Select-Object FullName, Length |
+            Format-Table -AutoSize
+
+      - name: Empaquetar en zip
+        shell: pwsh
+        run: |
+          $release = "build/windows/x64/runner/Release"
+          $stage = "../release-staging/hidrored"
+          $dest = "../release-artifacts/hidrored-windows-${{ github.sha }}.zip"
+          New-Item -ItemType Directory -Force -Path "../release-artifacts" | Out-Null
+          New-Item -ItemType Directory -Force -Path $stage | Out-Null
+
+          # Copiar TODO el contenido del Release (exe + DLLs + carpeta data/).
+          Copy-Item -Path "$release/*" -Destination $stage -Recurse -Force
+
+          # README de instalación dentro del zip para el cliente.
+          $readme = @"
+          Hidrored — Sistema de gestión de acueductos veredales
+          ======================================================
+
+          INSTALACIÓN:
+          1. Descomprime esta carpeta en cualquier ubicación
+             (sugerencia: C:\Hidrored).
+          2. Doble click en "hidrored.exe".
+          3. La primera vez Windows mostrará el aviso "SmartScreen": haz clic
+             en "Más información" y luego "Ejecutar de todos modos".
+             (El ejecutable no está firmado todavía — esto es normal.)
+
+          REQUISITOS:
+          - Windows 10 o superior, 64 bits.
+          - Conexión a internet (para sincronizar con la base de datos).
+          - Las DLLs de Visual C++ Runtime ya vienen incluidas — no es
+            necesario instalar nada adicional.
+
+          ARCHIVOS DEL PAQUETE:
+          - hidrored.exe         → aplicación principal
+          - flutter_windows.dll  → motor de Flutter
+          - *.dll                → librerías de funcionalidad y Visual C++
+          - data\                → recursos (íconos, fuentes, configuración)
+
+          IMPORTANTE: NO muevas el .exe a otra carpeta sin llevar también las
+          DLLs y la carpeta data\. Si lo haces, la app no abrirá.
+
+          Versión compilada: ${{ github.sha }}
+          Fecha: $(Get-Date -Format 'yyyy-MM-dd HH:mm')
+          "@
+          $readme | Out-File -FilePath "../release-staging/LEEME.txt" -Encoding UTF8
+
+          # Comprimir la staging completa (queda subcarpeta hidrored\ + LEEME.txt).
+          Compress-Archive -Path "../release-staging/*" -DestinationPath $dest -Force
+          Write-Host "Zip generado: $dest"
+          Get-Item $dest | Select-Object Name, Length | Format-Table -AutoSize
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hidrored-windows-zip
+          path: release-artifacts/hidrored-windows-*.zip
+          retention-days: 30
+
+  # =========================================================================
+  # Adjuntar artefactos a Release de GitHub si el evento es un tag/release
+  # =========================================================================
+  attach-to-release:
+    name: Adjuntar artefactos al release
+    if: github.event_name == 'release'
+    needs: [build-android, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+          merge-multiple: true
+
+      - name: Subir al release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-artifacts/*
