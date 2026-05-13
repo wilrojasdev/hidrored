@@ -38,12 +38,22 @@ String formatFechaLarga(DateTime fecha) {
 }
 
 /// Igual que [formatFechaLarga] y, si [horaRegistro] no es null, la hora en
-/// formato de 12 h con minutos (p. ej. "9:07 a. m.", locale `es_CO`).
+/// formato de 12 h con minutos (`h:mm a. m.|p. m.`), estable en todos los
+/// entornos (no depende de patrones `jm` de ICU por locale).
 String formatFechaLargaHora(DateTime fecha, {DateTime? horaRegistro}) {
   final base = formatFechaLarga(fecha);
   if (horaRegistro == null) return base;
-  final hora = DateFormat.jm('es_CO').format(horaRegistro);
-  return '$base, $hora';
+  return '$base, ${_formatHora12Colombiana(horaRegistro)}';
+}
+
+String _formatHora12Colombiana(DateTime d) {
+  final h24 = d.hour;
+  final min = d.minute.toString().padLeft(2, '0');
+  final esPm = h24 >= 12;
+  var h12 = h24 % 12;
+  if (h12 == 0) h12 = 12;
+  final sufijo = esPm ? 'p. m.' : 'a. m.';
+  return '$h12:$min $sufijo';
 }
 
 /// Formatea periodo "2025-05" -> "Mayo 2025".
