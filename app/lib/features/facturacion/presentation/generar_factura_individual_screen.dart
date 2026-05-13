@@ -87,14 +87,27 @@ class _GenerarFacturaIndividualScreenState
   Future<void> _ejecutar() async {
     final preview = _preview;
     if (preview == null) return;
+    final mensaje = StringBuffer(
+      'Se emitirá la factura para ${preview.cliente.nombre} '
+      '(${formatPeriodo(_periodo)}) por '
+      '${formatPesos(preview.totalRecibo)}.\n\n',
+    );
+    if (preview.cantidadRefacturadas > 0) {
+      mensaje.write(
+        '${preview.cantidadRefacturadas} '
+        '${pluralES(preview.cantidadRefacturadas, "factura anterior será absorbida", "facturas anteriores serán absorbidas")} '
+        '(${formatPesos(preview.totalRefacturado)} de saldo refacturado).\n\n',
+      );
+    }
+    mensaje.write(
+      'Si necesitas corregir algo después, puedes anular y los saldos '
+      'refacturados volverán a estar pendientes.',
+    );
+
     final ok = await confirm(
       context,
       titulo: 'Confirmar emisión',
-      mensaje:
-          'Se emitirá la factura para ${preview.cliente.nombre} '
-          '(${formatPeriodo(_periodo)}) por '
-          '${formatPesos(preview.totalFacturaNueva)}.\n\n'
-          'Si necesitas corregir algo después, puedes anular y re-emitir.',
+      mensaje: mensaje.toString(),
       confirmar: 'Emitir',
       icono: Icons.playlist_add_check,
     );
@@ -210,7 +223,7 @@ class _GenerarFacturaIndividualScreenState
           if (_preview != null && _preview!.tieneCargos) ...[
             AppSpacing.gapLg,
             _AccionesEmitir(
-              total: _preview!.totalFacturaNueva,
+              total: _preview!.totalRecibo,
               ejecutando: _ejecutando,
               onEjecutar: _ejecutar,
             ),
@@ -387,7 +400,7 @@ class _PreviewIndividual extends StatelessWidget {
       return const SizedBox.shrink();
     }
     final p = preview!;
-    if (!p.tieneCargos && p.totalAtrasos == 0) {
+    if (!p.tieneCargos) {
       return Card(
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.xxl),
@@ -437,9 +450,9 @@ class _PreviewIndividual extends StatelessWidget {
           icon: Icons.warning_amber,
           titulo: 'Intereses de mora',
           valor: p.valorMora,
-          subtitulo:
-              '${pluralES(p.cantidadAtrasos, "factura", "facturas")} '
-              'atrasadas',
+          subtitulo: p.cantidadRefacturadas > 0
+              ? 'Acumulada sobre saldos refacturados'
+              : null,
         ),
       );
     }
@@ -464,6 +477,16 @@ class _PreviewIndividual extends StatelessWidget {
         ),
       );
     }
+    for (final r in p.lineasRefacturadas) {
+      lineas.add(
+        _LineaResumen(
+          icon: Icons.history,
+          titulo: 'Saldo pendiente ${r.numero}',
+          subtitulo: 'Periodo ${formatPeriodo(r.periodo)} · refacturado',
+          valor: r.saldo,
+        ),
+      );
+    }
 
     return Card(
       child: Padding(
@@ -482,10 +505,10 @@ class _PreviewIndividual extends StatelessWidget {
             ],
             Row(
               children: [
-                Text('Total nuevo recibo', style: theme.textTheme.titleMedium),
+                Text('Total a cobrar', style: theme.textTheme.titleMedium),
                 const Spacer(),
                 Text(
-                  formatPesos(p.totalFacturaNueva),
+                  formatPesos(p.totalRecibo),
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w800,
                     color: theme.colorScheme.primary,
@@ -493,7 +516,7 @@ class _PreviewIndividual extends StatelessWidget {
                 ),
               ],
             ),
-            if (p.totalAtrasos > 0) ...[
+            if (p.cantidadRefacturadas > 0) ...[
               AppSpacing.gapSm,
               Container(
                 padding: const EdgeInsets.all(AppSpacing.md),
@@ -506,17 +529,16 @@ class _PreviewIndividual extends StatelessWidget {
                 child: Row(
                   children: [
                     Icon(
-                      Icons.history,
+                      Icons.merge_type,
                       size: 18,
                       color: theme.colorScheme.onTertiaryContainer,
                     ),
                     AppSpacing.gapSm,
                     Expanded(
                       child: Text(
-                        'Además, este cliente tiene '
-                        '${pluralES(p.cantidadAtrasos, "factura atrasada", "facturas atrasadas")} '
-                        'por ${formatPesos(p.totalAtrasos)} que aparecerán en '
-                        'el recibo impreso pero no se emiten de nuevo.',
+                        'Al emitir, '
+                        '${pluralES(p.cantidadRefacturadas, "factura anterior pasará a estado refacturada", "facturas anteriores pasarán a estado refacturada")} '
+                        'y su saldo (${formatPesos(p.totalRefacturado)}) se cobrará en esta nueva factura.',
                         style: theme.textTheme.bodySmall,
                       ),
                     ),

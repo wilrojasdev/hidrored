@@ -33,7 +33,7 @@ class ClienteFormScreen extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(AppSpacing.xxl),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
             children: [
@@ -54,13 +54,23 @@ class ClienteFormScreen extends ConsumerWidget {
           ),
           AppSpacing.gapLg,
           Expanded(
-            child: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: AppSizes.formMaxWidth,
-                ),
-                child: isEdit ? _EditForm(id: id!) : const _CreateForm(),
-              ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  primary: false,
+                  physics: const ClampingScrollPhysics(),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minWidth: constraints.maxWidth,
+                      maxWidth: constraints.maxWidth,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: AppSpacing.xxl),
+                      child: isEdit ? _EditForm(id: id!) : const _CreateForm(),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],
@@ -252,7 +262,7 @@ class _ClienteFormBodyState extends ConsumerState<_ClienteFormBody> {
           widget.initial!.id,
           cedula: cedulaDigits,
           nombre: _nombreCtrl.text.trim(),
-          direccion: _opt(_direccionCtrl.text),
+          direccion: _direccionCtrl.text.trim(),
           telefono: telefonoDigits,
           sector: _opt(_sectorCtrl.text),
           zona: _opt(_zonaCtrl.text),
@@ -267,7 +277,7 @@ class _ClienteFormBodyState extends ConsumerState<_ClienteFormBody> {
           codigo: int.parse(_codigoCtrl.text),
           cedula: cedulaDigits,
           nombre: _nombreCtrl.text.trim(),
-          direccion: _opt(_direccionCtrl.text),
+          direccion: _direccionCtrl.text.trim(),
           telefono: telefonoDigits,
           sector: _opt(_sectorCtrl.text),
           zona: _opt(_zonaCtrl.text),
@@ -398,12 +408,13 @@ class _ClienteFormBodyState extends ConsumerState<_ClienteFormBody> {
                 TextFormField(
                   controller: _direccionCtrl,
                   decoration: const InputDecoration(
-                    labelText: 'Dirección',
+                    labelText: 'Dirección *',
                     hintText: 'Ej. MZ 2 CASA 8',
                     prefixIcon: Icon(Icons.location_on_outlined),
                   ),
                   enabled: !_saving,
                   textCapitalization: TextCapitalization.characters,
+                  validator: _required,
                 ),
                 AppSpacing.gapMd,
                 Row(

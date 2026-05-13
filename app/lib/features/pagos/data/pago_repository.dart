@@ -21,10 +21,15 @@ class PagoRepository {
   Future<List<Pago>> list({String? clienteId, int limit = 200}) async {
     var query = _client.from('pagos').select().eq('tenant_id', _tenantId);
     if (clienteId != null) query = query.eq('cliente_id', clienteId);
-    final data = await query.order('fecha', ascending: false).limit(limit);
-    return (data as List)
+    final data = await query
+        .order('fecha', ascending: false)
+        .order('created_at', ascending: false)
+        .limit(limit);
+    final list = (data as List)
         .map((row) => Pago.fromJson(row as Map<String, dynamic>))
         .toList();
+    _sortPagosPorFechaRecientePrimero(list);
+    return list;
   }
 
   Future<Pago> get(String id) async {
@@ -102,6 +107,25 @@ class PagoRepository {
       '${d.year.toString().padLeft(4, '0')}-'
       '${d.month.toString().padLeft(2, '0')}-'
       '${d.day.toString().padLeft(2, '0')}';
+}
+
+/// Más reciente primero: `fecha` descendente, luego `created_at` e `id`.
+void _sortPagosPorFechaRecientePrimero(List<Pago> pagos) {
+  pagos.sort((a, b) {
+    final byFecha = b.fecha.compareTo(a.fecha);
+    if (byFecha != 0) return byFecha;
+    final ca = a.createdAt;
+    final cb = b.createdAt;
+    if (ca != null && cb != null) {
+      final byCreated = cb.compareTo(ca);
+      if (byCreated != 0) return byCreated;
+    } else if (ca == null && cb != null) {
+      return 1;
+    } else if (ca != null && cb == null) {
+      return -1;
+    }
+    return b.id.compareTo(a.id);
+  });
 }
 
 final pagoRepositoryProvider = Provider<PagoRepository>((ref) {

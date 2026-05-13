@@ -138,7 +138,8 @@ class _PagoTile extends StatelessWidget {
       button: true,
       label:
           'Pago de $nombreCliente, ${formatPesos(pago.valor)}, '
-          '${pago.metodo.label}, ${formatFecha(pago.fecha)}',
+          '${pago.metodo.label}, '
+          '${formatFechaLargaHora(pago.fecha, horaRegistro: pago.createdAt)}',
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: theme.colorScheme.tertiaryContainer,
@@ -162,7 +163,7 @@ class _PagoTile extends StatelessWidget {
           ],
         ),
         subtitle: Text(
-          '${formatFecha(pago.fecha)}'
+          '${formatFechaLargaHora(pago.fecha, horaRegistro: pago.createdAt)}'
           '${pago.referencia == null ? '' : ' · Ref: ${pago.referencia}'}',
         ),
         trailing: Row(
@@ -170,8 +171,8 @@ class _PagoTile extends StatelessWidget {
           children: [
             Text(
               formatPesos(pago.valor),
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
+              style: AppListTypography.monto(
+                theme,
                 color: theme.colorScheme.primary,
               ),
             ),

@@ -46,6 +46,29 @@ class FestivosColombia {
     return !esFestivo(fecha);
   }
 
+  /// Días hábiles (lun–vie, sin festivos CO) **después** de la fecha de
+  /// vencimiento hasta [hoy], ambas comparadas por día calendario.
+  ///
+  /// El día de vencimiento no cuenta: el primer día posible es el siguiente
+  /// calendario. Así un cliente con factura que vence hoy tiene 0 días hábiles
+  /// de mora (aún no entra en reporte de morosos).
+  static int diasHabilesTrasVencimiento(DateTime fechaVencimiento, DateTime hoy) {
+    final v = DateTime(
+      fechaVencimiento.year,
+      fechaVencimiento.month,
+      fechaVencimiento.day,
+    );
+    final h = DateTime(hoy.year, hoy.month, hoy.day);
+    var cursor = v.add(const Duration(days: 1));
+    if (cursor.isAfter(h)) return 0;
+    var n = 0;
+    while (!cursor.isAfter(h)) {
+      if (esDiaHabil(cursor)) n++;
+      cursor = cursor.add(const Duration(days: 1));
+    }
+    return n;
+  }
+
   /// Suma N dias habiles a una fecha.
   static DateTime sumarDiasHabiles(DateTime fecha, int dias) {
     var cursor = DateTime(fecha.year, fecha.month, fecha.day);

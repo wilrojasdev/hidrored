@@ -20,4 +20,21 @@ void main() {
   test('formatFecha: dd/MM/yyyy', () {
     expect(formatFecha(DateTime(2025, 5, 30)), '30/05/2025');
   });
+
+  test('formatFechaLarga: mes y año en español', () {
+    final s = formatFechaLarga(DateTime(2025, 3, 25));
+    expect(s[0], s[0].toLowerCase());
+    expect(s.toLowerCase(), contains('marzo'));
+    expect(s, contains('2025'));
+    expect(s, contains('25'));
+  });
+
+  test('formatFechaLargaHora: incluye hora 12 h con minutos', () {
+    final fecha = DateTime(2025, 3, 25);
+    final reg = DateTime(2025, 3, 25, 9, 7);
+    final full = formatFechaLargaHora(fecha, horaRegistro: reg);
+    expect(full, contains('9:07'));
+    expect(full.toLowerCase(), contains('a.'));
+    expect(full.toLowerCase(), contains('m.'));
+  });
 }

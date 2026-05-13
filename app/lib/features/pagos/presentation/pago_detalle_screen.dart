@@ -99,7 +99,10 @@ class _Body extends ConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      formatFecha(pago.fecha),
+                      formatFechaLargaHora(
+                        pago.fecha,
+                        horaRegistro: pago.createdAt,
+                      ),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),

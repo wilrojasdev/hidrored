@@ -87,6 +87,14 @@ class _RegistrarPagoScreenState extends ConsumerState<RegistrarPagoScreen> {
       AppSnackbar.errorMessage(context, 'Ingresa un valor mayor a cero');
       return;
     }
+    if (aplicacion.aplicaciones.isEmpty) {
+      AppSnackbar.errorMessage(
+        context,
+        'No se puede registrar el pago: el cliente no tiene facturas '
+        'pendientes. Genera primero la factura del periodo.',
+      );
+      return;
+    }
 
     final cerradas = aplicacion.aplicaciones
         .where((a) => a.monto >= a.factura.total)
@@ -172,7 +180,7 @@ class _RegistrarPagoScreenState extends ConsumerState<RegistrarPagoScreen> {
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.xxl),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
               children: [
@@ -197,14 +205,23 @@ class _RegistrarPagoScreenState extends ConsumerState<RegistrarPagoScreen> {
             ),
             AppSpacing.gapLg,
             Expanded(
-              child: SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: AppSizes.formMaxWidth,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    primary: false,
+                    physics: const ClampingScrollPhysics(),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: constraints.maxWidth,
+                        maxWidth: constraints.maxWidth,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: AppSpacing.xxl,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
                       Card(
                         child: Padding(
                           padding: const EdgeInsets.all(AppSpacing.xl),
@@ -262,12 +279,6 @@ class _RegistrarPagoScreenState extends ConsumerState<RegistrarPagoScreen> {
                         ),
                       ),
                       if (_cliente != null) ...[
-                        AppSpacing.gapLg,
-                        _SaldoCard(
-                          clienteId: _cliente!.id,
-                          valorCtrl: _valorCtrl,
-                          onPrefill: () => setState(() {}),
-                        ),
                         AppSpacing.gapLg,
                         Card(
                           child: Padding(
@@ -366,17 +377,21 @@ class _RegistrarPagoScreenState extends ConsumerState<RegistrarPagoScreen> {
                           ),
                         ),
                         AppSpacing.gapLg,
-                        _AplicacionPreview(
+                        _SaldoYAplicacionCard(
                           clienteId: _cliente!.id,
                           valorCtrl: _valorCtrl,
                           saving: _saving,
+                          onPrefill: () => setState(() {}),
                           onConfirm: _registrar,
                         ),
                       ],
                     ],
                   ),
-                ),
-              ),
+            ),
+          ),
+        );
+      },
+    ),
             ),
           ],
         ),
@@ -385,20 +400,27 @@ class _RegistrarPagoScreenState extends ConsumerState<RegistrarPagoScreen> {
   }
 }
 
-class _SaldoCard extends ConsumerWidget {
-  const _SaldoCard({
+class _SaldoYAplicacionCard extends ConsumerWidget {
+  const _SaldoYAplicacionCard({
     required this.clienteId,
     required this.valorCtrl,
+    required this.saving,
     required this.onPrefill,
+    required this.onConfirm,
   });
+
   final String clienteId;
   final TextEditingController valorCtrl;
+  final bool saving;
   final VoidCallback onPrefill;
+  final void Function(AplicacionPago) onConfirm;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final valor = parsePesos(valorCtrl.text) ?? 0;
     final asyncFacturas = ref.watch(facturasPendientesProvider(clienteId));
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.xl),
@@ -406,36 +428,58 @@ class _SaldoCard extends ConsumerWidget {
           value: asyncFacturas,
           data: (facturas) {
             final saldo = facturas.fold<int>(0, (s, f) => s + f.total);
+            final aplicacion = valor > 0
+                ? AplicacionPagoCalculator.calcular(
+                    facturasPendientes: facturas,
+                    valorPago: valor,
+                  )
+                : null;
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  'Saldo pendiente y aplicación',
+                  style: theme.textTheme.titleMedium,
+                ),
+                AppSpacing.gapSm,
+                Text(
+                  'Puedes rellenar el valor con «Usar saldo» y revisar cómo '
+                  'se reparte antes de registrar.',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                AppSpacing.gapMd,
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('Saldo pendiente', style: theme.textTheme.titleMedium),
-                    const Spacer(),
-                    Text(
-                      formatPesos(saldo),
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: saldo > 0
-                            ? theme.colorScheme.primary
-                            : theme.colorScheme.outline,
+                    Expanded(
+                      child: Text(
+                        formatPesos(saldo),
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: saldo > 0
+                              ? theme.colorScheme.primary
+                              : theme.colorScheme.outline,
+                        ),
                       ),
                     ),
-                    AppSpacing.gapMd,
                     if (saldo > 0)
                       OutlinedButton(
-                        onPressed: () {
-                          valorCtrl.text = formatPesosNoSymbol(saldo);
-                          onPrefill();
-                        },
+                        onPressed: saving
+                            ? null
+                            : () {
+                                valorCtrl.text = formatPesosNoSymbol(saldo);
+                                onPrefill();
+                              },
                         child: const Text('Usar saldo'),
                       ),
                   ],
                 ),
                 if (facturas.isEmpty)
                   Padding(
-                    padding: const EdgeInsets.only(top: AppSpacing.sm),
+                    padding: const EdgeInsets.only(top: AppSpacing.md),
                     child: Text(
                       'Este cliente no tiene facturas pendientes.',
                       style: theme.textTheme.bodyMedium?.copyWith(
@@ -444,195 +488,177 @@ class _SaldoCard extends ConsumerWidget {
                     ),
                   )
                 else ...[
-                  AppSpacing.gapMd,
-                  for (final f in facturas)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: AppSpacing.xs,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.receipt_long_outlined,
+                  AppSpacing.gapLg,
+                  if (valor <= 0)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.info_outline,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        AppSpacing.gapMd,
+                        Expanded(
+                          child: Text(
+                            'Indica el valor recibido arriba o toca «Usar saldo» '
+                            'para ver el reparto del pago.',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  else ...[
+                    Row(
+                      children: [
+                        Text(
+                          'Reparto del pago',
+                          style: theme.textTheme.titleSmall,
+                        ),
+                        AppSpacing.gapSm,
+                        Tooltip(
+                          message:
+                              'Cada cliente tiene una sola factura pendiente '
+                              '(la última emitida, que ya incluye los saldos '
+                              'absorbidos de meses anteriores). El pago se '
+                              'aplica a esa factura.',
+                          child: Icon(
+                            Icons.help_outline,
                             size: 16,
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
-                          AppSpacing.gapSm,
-                          Expanded(
-                            child: Text(
-                              '${f.numero} · ${formatPeriodo(f.periodo)}',
-                            ),
-                          ),
-                          Text(formatPesos(f.total)),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
+                    AppSpacing.gapMd,
+                    if (aplicacion!.aplicaciones.isEmpty)
+                      Container(
+                        padding: const EdgeInsets.all(AppSpacing.md),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.errorContainer,
+                          borderRadius: BorderRadius.circular(
+                            AppSizes.radiusSm,
+                          ),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.block,
+                              color: theme.colorScheme.onErrorContainer,
+                            ),
+                            AppSpacing.gapMd,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'No se puede registrar el pago',
+                                    style: theme.textTheme.titleSmall?.copyWith(
+                                      color: theme.colorScheme.onErrorContainer,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  AppSpacing.gapXs,
+                                  Text(
+                                    'Este cliente no tiene facturas pendientes '
+                                    'a las que aplicar el pago. Genera primero '
+                                    'la factura del periodo correspondiente y '
+                                    'luego vuelve a registrar el pago.',
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      color: theme.colorScheme.onErrorContainer,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    else
+                      for (final a in aplicacion.aplicaciones)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: AppSpacing.xs,
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                a.monto >= a.factura.total
+                                    ? Icons.check_circle
+                                    : Icons.adjust,
+                                size: 16,
+                                color: a.monto >= a.factura.total
+                                    ? theme.colorScheme.primary
+                                    : theme.colorScheme.tertiary,
+                              ),
+                              AppSpacing.gapSm,
+                              Expanded(
+                                child: Text(
+                                  '${a.factura.numero} · '
+                                  '${formatPeriodo(a.factura.periodo)}',
+                                ),
+                              ),
+                              Text('${formatPesos(a.monto)} '),
+                              Text(
+                                '/ ${formatPesos(a.factura.total)}',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                    if (aplicacion.aplicaciones.isNotEmpty) ...[
+                      if (aplicacion.faltante > 0) ...[
+                        AppSpacing.gapSm,
+                        Text(
+                          'Falta ${formatPesos(aplicacion.faltante)} para '
+                          'cubrir el saldo total.',
+                          style: TextStyle(color: theme.colorScheme.error),
+                        ),
+                      ],
+                      if (aplicacion.sobrante > 0) ...[
+                        AppSpacing.gapSm,
+                        Text(
+                          'Sobran ${formatPesos(aplicacion.sobrante)} (no se '
+                          'aplican a ninguna factura).',
+                          style: TextStyle(color: theme.colorScheme.tertiary),
+                        ),
+                      ],
+                    ],
+                    AppSpacing.gapLg,
+                    Row(
+                      children: [
+                        const Spacer(),
+                        FilledButton.icon(
+                          onPressed:
+                              (saving || aplicacion.aplicaciones.isEmpty)
+                                  ? null
+                                  : () => onConfirm(aplicacion),
+                          icon: saving
+                              ? const SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : const Icon(Icons.check),
+                          label: Text(
+                            saving ? 'Guardando...' : 'Registrar pago',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ],
             );
           },
         ),
       ),
-    );
-  }
-}
-
-class _AplicacionPreview extends ConsumerWidget {
-  const _AplicacionPreview({
-    required this.clienteId,
-    required this.valorCtrl,
-    required this.saving,
-    required this.onConfirm,
-  });
-  final String clienteId;
-  final TextEditingController valorCtrl;
-  final bool saving;
-  final void Function(AplicacionPago) onConfirm;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    final valor = parsePesos(valorCtrl.text) ?? 0;
-    if (valor <= 0) {
-      return Card(
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.xl),
-          child: Row(
-            children: [
-              Icon(
-                Icons.info_outline,
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-              AppSpacing.gapMd,
-              Expanded(
-                child: Text(
-                  'Ingresa un valor para ver cómo se aplicará el pago.',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-    final asyncFacturas = ref.watch(facturasPendientesProvider(clienteId));
-    return AsyncValueWidget<List<Factura>>(
-      value: asyncFacturas,
-      data: (facturas) {
-        final aplicacion = AplicacionPagoCalculator.calcular(
-          facturasPendientes: facturas,
-          valorPago: valor,
-        );
-        return Card(
-          child: Padding(
-            padding: const EdgeInsets.all(AppSpacing.xl),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'Aplicación del pago',
-                      style: theme.textTheme.titleMedium,
-                    ),
-                    AppSpacing.gapSm,
-                    Tooltip(
-                      message:
-                          'El pago se aplica primero a las facturas más antiguas. '
-                          'Cuando una factura queda totalmente cubierta, se cierra.',
-                      child: Icon(
-                        Icons.help_outline,
-                        size: 16,
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-                AppSpacing.gapXs,
-                Text(
-                  'Se aplica primero a la factura más antigua.',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                AppSpacing.gapMd,
-                if (aplicacion.aplicaciones.isEmpty)
-                  Text(
-                    'Sin facturas pendientes — el pago se registra pero no '
-                    'se aplica a ninguna factura.',
-                    style: theme.textTheme.bodyMedium,
-                  )
-                else
-                  for (final a in aplicacion.aplicaciones)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: AppSpacing.xs,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            a.monto >= a.factura.total
-                                ? Icons.check_circle
-                                : Icons.adjust,
-                            size: 16,
-                            color: a.monto >= a.factura.total
-                                ? theme.colorScheme.primary
-                                : theme.colorScheme.tertiary,
-                          ),
-                          AppSpacing.gapSm,
-                          Expanded(
-                            child: Text(
-                              '${a.factura.numero} · ${formatPeriodo(a.factura.periodo)}',
-                            ),
-                          ),
-                          Text('${formatPesos(a.monto)} '),
-                          Text(
-                            '/ ${formatPesos(a.factura.total)}',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                if (aplicacion.faltante > 0) ...[
-                  AppSpacing.gapSm,
-                  Text(
-                    'Falta ${formatPesos(aplicacion.faltante)} para cubrir el saldo total.',
-                    style: TextStyle(color: theme.colorScheme.error),
-                  ),
-                ],
-                if (aplicacion.sobrante > 0) ...[
-                  AppSpacing.gapSm,
-                  Text(
-                    'Sobran ${formatPesos(aplicacion.sobrante)} (no se aplican a ninguna factura).',
-                    style: TextStyle(color: theme.colorScheme.tertiary),
-                  ),
-                ],
-                AppSpacing.gapLg,
-                Row(
-                  children: [
-                    const Spacer(),
-                    FilledButton.icon(
-                      onPressed: saving ? null : () => onConfirm(aplicacion),
-                      icon: saving
-                          ? const SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Icon(Icons.check),
-                      label: Text(saving ? 'Guardando...' : 'Registrar pago'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 }

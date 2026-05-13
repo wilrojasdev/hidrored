@@ -67,7 +67,8 @@ class EstadoCuentaLoader {
         .select()
         .eq('tenant_id', _tenantId)
         .eq('cliente_id', clienteId)
-        .order('fecha');
+        .order('fecha', ascending: true)
+        .order('created_at', ascending: true);
     return (data as List)
         .map((row) => Pago.fromJson(row as Map<String, dynamic>))
         .toList();

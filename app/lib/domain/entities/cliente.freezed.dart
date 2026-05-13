@@ -12,8 +12,7 @@ part of 'cliente.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 Cliente _$ClienteFromJson(Map<String, dynamic> json) {
   return _Cliente.fromJson(json);
@@ -58,27 +57,26 @@ abstract class $ClienteCopyWith<$Res> {
   factory $ClienteCopyWith(Cliente value, $Res Function(Cliente) then) =
       _$ClienteCopyWithImpl<$Res, Cliente>;
   @useResult
-  $Res call({
-    String id,
-    @JsonKey(name: 'tenant_id') String tenantId,
-    int codigo,
-    String cedula,
-    String nombre,
-    String? direccion,
-    String? telefono,
-    String? sector,
-    String? zona,
-    String? barrio,
-    @JsonKey(name: 'tarifa_mensual') int tarifaMensual,
-    @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
-    EstadoCliente estado,
-    @JsonKey(name: 'fecha_ingreso') DateTime fechaIngreso,
-    @JsonKey(name: 'fecha_retiro') DateTime? fechaRetiro,
-    @JsonKey(name: 'deuda_inicial') int deudaInicial,
-    String? notas,
-    @JsonKey(name: 'created_at') DateTime? createdAt,
-    @JsonKey(name: 'updated_at') DateTime? updatedAt,
-  });
+  $Res call(
+      {String id,
+      @JsonKey(name: 'tenant_id') String tenantId,
+      int codigo,
+      String cedula,
+      String nombre,
+      String? direccion,
+      String? telefono,
+      String? sector,
+      String? zona,
+      String? barrio,
+      @JsonKey(name: 'tarifa_mensual') int tarifaMensual,
+      @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
+      EstadoCliente estado,
+      @JsonKey(name: 'fecha_ingreso') DateTime fechaIngreso,
+      @JsonKey(name: 'fecha_retiro') DateTime? fechaRetiro,
+      @JsonKey(name: 'deuda_inicial') int deudaInicial,
+      String? notas,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt});
 }
 
 /// @nodoc
@@ -113,115 +111,110 @@ class _$ClienteCopyWithImpl<$Res, $Val extends Cliente>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
-    return _then(
-      _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            tenantId: null == tenantId
-                ? _value.tenantId
-                : tenantId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            codigo: null == codigo
-                ? _value.codigo
-                : codigo // ignore: cast_nullable_to_non_nullable
-                      as int,
-            cedula: null == cedula
-                ? _value.cedula
-                : cedula // ignore: cast_nullable_to_non_nullable
-                      as String,
-            nombre: null == nombre
-                ? _value.nombre
-                : nombre // ignore: cast_nullable_to_non_nullable
-                      as String,
-            direccion: freezed == direccion
-                ? _value.direccion
-                : direccion // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            telefono: freezed == telefono
-                ? _value.telefono
-                : telefono // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            sector: freezed == sector
-                ? _value.sector
-                : sector // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            zona: freezed == zona
-                ? _value.zona
-                : zona // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            barrio: freezed == barrio
-                ? _value.barrio
-                : barrio // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            tarifaMensual: null == tarifaMensual
-                ? _value.tarifaMensual
-                : tarifaMensual // ignore: cast_nullable_to_non_nullable
-                      as int,
-            estado: null == estado
-                ? _value.estado
-                : estado // ignore: cast_nullable_to_non_nullable
-                      as EstadoCliente,
-            fechaIngreso: null == fechaIngreso
-                ? _value.fechaIngreso
-                : fechaIngreso // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-            fechaRetiro: freezed == fechaRetiro
-                ? _value.fechaRetiro
-                : fechaRetiro // ignore: cast_nullable_to_non_nullable
-                      as DateTime?,
-            deudaInicial: null == deudaInicial
-                ? _value.deudaInicial
-                : deudaInicial // ignore: cast_nullable_to_non_nullable
-                      as int,
-            notas: freezed == notas
-                ? _value.notas
-                : notas // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            createdAt: freezed == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime?,
-            updatedAt: freezed == updatedAt
-                ? _value.updatedAt
-                : updatedAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime?,
-          )
-          as $Val,
-    );
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      tenantId: null == tenantId
+          ? _value.tenantId
+          : tenantId // ignore: cast_nullable_to_non_nullable
+              as String,
+      codigo: null == codigo
+          ? _value.codigo
+          : codigo // ignore: cast_nullable_to_non_nullable
+              as int,
+      cedula: null == cedula
+          ? _value.cedula
+          : cedula // ignore: cast_nullable_to_non_nullable
+              as String,
+      nombre: null == nombre
+          ? _value.nombre
+          : nombre // ignore: cast_nullable_to_non_nullable
+              as String,
+      direccion: freezed == direccion
+          ? _value.direccion
+          : direccion // ignore: cast_nullable_to_non_nullable
+              as String?,
+      telefono: freezed == telefono
+          ? _value.telefono
+          : telefono // ignore: cast_nullable_to_non_nullable
+              as String?,
+      sector: freezed == sector
+          ? _value.sector
+          : sector // ignore: cast_nullable_to_non_nullable
+              as String?,
+      zona: freezed == zona
+          ? _value.zona
+          : zona // ignore: cast_nullable_to_non_nullable
+              as String?,
+      barrio: freezed == barrio
+          ? _value.barrio
+          : barrio // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tarifaMensual: null == tarifaMensual
+          ? _value.tarifaMensual
+          : tarifaMensual // ignore: cast_nullable_to_non_nullable
+              as int,
+      estado: null == estado
+          ? _value.estado
+          : estado // ignore: cast_nullable_to_non_nullable
+              as EstadoCliente,
+      fechaIngreso: null == fechaIngreso
+          ? _value.fechaIngreso
+          : fechaIngreso // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      fechaRetiro: freezed == fechaRetiro
+          ? _value.fechaRetiro
+          : fechaRetiro // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      deudaInicial: null == deudaInicial
+          ? _value.deudaInicial
+          : deudaInicial // ignore: cast_nullable_to_non_nullable
+              as int,
+      notas: freezed == notas
+          ? _value.notas
+          : notas // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+    ) as $Val);
   }
 }
 
 /// @nodoc
 abstract class _$$ClienteImplCopyWith<$Res> implements $ClienteCopyWith<$Res> {
   factory _$$ClienteImplCopyWith(
-    _$ClienteImpl value,
-    $Res Function(_$ClienteImpl) then,
-  ) = __$$ClienteImplCopyWithImpl<$Res>;
+          _$ClienteImpl value, $Res Function(_$ClienteImpl) then) =
+      __$$ClienteImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    String id,
-    @JsonKey(name: 'tenant_id') String tenantId,
-    int codigo,
-    String cedula,
-    String nombre,
-    String? direccion,
-    String? telefono,
-    String? sector,
-    String? zona,
-    String? barrio,
-    @JsonKey(name: 'tarifa_mensual') int tarifaMensual,
-    @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
-    EstadoCliente estado,
-    @JsonKey(name: 'fecha_ingreso') DateTime fechaIngreso,
-    @JsonKey(name: 'fecha_retiro') DateTime? fechaRetiro,
-    @JsonKey(name: 'deuda_inicial') int deudaInicial,
-    String? notas,
-    @JsonKey(name: 'created_at') DateTime? createdAt,
-    @JsonKey(name: 'updated_at') DateTime? updatedAt,
-  });
+  $Res call(
+      {String id,
+      @JsonKey(name: 'tenant_id') String tenantId,
+      int codigo,
+      String cedula,
+      String nombre,
+      String? direccion,
+      String? telefono,
+      String? sector,
+      String? zona,
+      String? barrio,
+      @JsonKey(name: 'tarifa_mensual') int tarifaMensual,
+      @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
+      EstadoCliente estado,
+      @JsonKey(name: 'fecha_ingreso') DateTime fechaIngreso,
+      @JsonKey(name: 'fecha_retiro') DateTime? fechaRetiro,
+      @JsonKey(name: 'deuda_inicial') int deudaInicial,
+      String? notas,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt});
 }
 
 /// @nodoc
@@ -229,9 +222,8 @@ class __$$ClienteImplCopyWithImpl<$Res>
     extends _$ClienteCopyWithImpl<$Res, _$ClienteImpl>
     implements _$$ClienteImplCopyWith<$Res> {
   __$$ClienteImplCopyWithImpl(
-    _$ClienteImpl _value,
-    $Res Function(_$ClienteImpl) _then,
-  ) : super(_value, _then);
+      _$ClienteImpl _value, $Res Function(_$ClienteImpl) _then)
+      : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -255,109 +247,107 @@ class __$$ClienteImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
-    return _then(
-      _$ClienteImpl(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                  as String,
-        tenantId: null == tenantId
-            ? _value.tenantId
-            : tenantId // ignore: cast_nullable_to_non_nullable
-                  as String,
-        codigo: null == codigo
-            ? _value.codigo
-            : codigo // ignore: cast_nullable_to_non_nullable
-                  as int,
-        cedula: null == cedula
-            ? _value.cedula
-            : cedula // ignore: cast_nullable_to_non_nullable
-                  as String,
-        nombre: null == nombre
-            ? _value.nombre
-            : nombre // ignore: cast_nullable_to_non_nullable
-                  as String,
-        direccion: freezed == direccion
-            ? _value.direccion
-            : direccion // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        telefono: freezed == telefono
-            ? _value.telefono
-            : telefono // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        sector: freezed == sector
-            ? _value.sector
-            : sector // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        zona: freezed == zona
-            ? _value.zona
-            : zona // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        barrio: freezed == barrio
-            ? _value.barrio
-            : barrio // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        tarifaMensual: null == tarifaMensual
-            ? _value.tarifaMensual
-            : tarifaMensual // ignore: cast_nullable_to_non_nullable
-                  as int,
-        estado: null == estado
-            ? _value.estado
-            : estado // ignore: cast_nullable_to_non_nullable
-                  as EstadoCliente,
-        fechaIngreso: null == fechaIngreso
-            ? _value.fechaIngreso
-            : fechaIngreso // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
-        fechaRetiro: freezed == fechaRetiro
-            ? _value.fechaRetiro
-            : fechaRetiro // ignore: cast_nullable_to_non_nullable
-                  as DateTime?,
-        deudaInicial: null == deudaInicial
-            ? _value.deudaInicial
-            : deudaInicial // ignore: cast_nullable_to_non_nullable
-                  as int,
-        notas: freezed == notas
-            ? _value.notas
-            : notas // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        createdAt: freezed == createdAt
-            ? _value.createdAt
-            : createdAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime?,
-        updatedAt: freezed == updatedAt
-            ? _value.updatedAt
-            : updatedAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime?,
-      ),
-    );
+    return _then(_$ClienteImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      tenantId: null == tenantId
+          ? _value.tenantId
+          : tenantId // ignore: cast_nullable_to_non_nullable
+              as String,
+      codigo: null == codigo
+          ? _value.codigo
+          : codigo // ignore: cast_nullable_to_non_nullable
+              as int,
+      cedula: null == cedula
+          ? _value.cedula
+          : cedula // ignore: cast_nullable_to_non_nullable
+              as String,
+      nombre: null == nombre
+          ? _value.nombre
+          : nombre // ignore: cast_nullable_to_non_nullable
+              as String,
+      direccion: freezed == direccion
+          ? _value.direccion
+          : direccion // ignore: cast_nullable_to_non_nullable
+              as String?,
+      telefono: freezed == telefono
+          ? _value.telefono
+          : telefono // ignore: cast_nullable_to_non_nullable
+              as String?,
+      sector: freezed == sector
+          ? _value.sector
+          : sector // ignore: cast_nullable_to_non_nullable
+              as String?,
+      zona: freezed == zona
+          ? _value.zona
+          : zona // ignore: cast_nullable_to_non_nullable
+              as String?,
+      barrio: freezed == barrio
+          ? _value.barrio
+          : barrio // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tarifaMensual: null == tarifaMensual
+          ? _value.tarifaMensual
+          : tarifaMensual // ignore: cast_nullable_to_non_nullable
+              as int,
+      estado: null == estado
+          ? _value.estado
+          : estado // ignore: cast_nullable_to_non_nullable
+              as EstadoCliente,
+      fechaIngreso: null == fechaIngreso
+          ? _value.fechaIngreso
+          : fechaIngreso // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      fechaRetiro: freezed == fechaRetiro
+          ? _value.fechaRetiro
+          : fechaRetiro // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      deudaInicial: null == deudaInicial
+          ? _value.deudaInicial
+          : deudaInicial // ignore: cast_nullable_to_non_nullable
+              as int,
+      notas: freezed == notas
+          ? _value.notas
+          : notas // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ClienteImpl extends _Cliente {
-  const _$ClienteImpl({
-    required this.id,
-    @JsonKey(name: 'tenant_id') required this.tenantId,
-    required this.codigo,
-    required this.cedula,
-    required this.nombre,
-    this.direccion,
-    this.telefono,
-    this.sector,
-    this.zona,
-    this.barrio,
-    @JsonKey(name: 'tarifa_mensual') required this.tarifaMensual,
-    @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
-    this.estado = EstadoCliente.activo,
-    @JsonKey(name: 'fecha_ingreso') required this.fechaIngreso,
-    @JsonKey(name: 'fecha_retiro') this.fechaRetiro,
-    @JsonKey(name: 'deuda_inicial') this.deudaInicial = 0,
-    this.notas,
-    @JsonKey(name: 'created_at') this.createdAt,
-    @JsonKey(name: 'updated_at') this.updatedAt,
-  }) : super._();
+  const _$ClienteImpl(
+      {required this.id,
+      @JsonKey(name: 'tenant_id') required this.tenantId,
+      required this.codigo,
+      required this.cedula,
+      required this.nombre,
+      this.direccion,
+      this.telefono,
+      this.sector,
+      this.zona,
+      this.barrio,
+      @JsonKey(name: 'tarifa_mensual') required this.tarifaMensual,
+      @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
+      this.estado = EstadoCliente.activo,
+      @JsonKey(name: 'fecha_ingreso') required this.fechaIngreso,
+      @JsonKey(name: 'fecha_retiro') this.fechaRetiro,
+      @JsonKey(name: 'deuda_inicial') this.deudaInicial = 0,
+      this.notas,
+      @JsonKey(name: 'created_at') this.createdAt,
+      @JsonKey(name: 'updated_at') this.updatedAt})
+      : super._();
 
   factory _$ClienteImpl.fromJson(Map<String, dynamic> json) =>
       _$$ClienteImplFromJson(json);
@@ -449,26 +439,25 @@ class _$ClienteImpl extends _Cliente {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    id,
-    tenantId,
-    codigo,
-    cedula,
-    nombre,
-    direccion,
-    telefono,
-    sector,
-    zona,
-    barrio,
-    tarifaMensual,
-    estado,
-    fechaIngreso,
-    fechaRetiro,
-    deudaInicial,
-    notas,
-    createdAt,
-    updatedAt,
-  );
+      runtimeType,
+      id,
+      tenantId,
+      codigo,
+      cedula,
+      nombre,
+      direccion,
+      telefono,
+      sector,
+      zona,
+      barrio,
+      tarifaMensual,
+      estado,
+      fechaIngreso,
+      fechaRetiro,
+      deudaInicial,
+      notas,
+      createdAt,
+      updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -478,32 +467,33 @@ class _$ClienteImpl extends _Cliente {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ClienteImplToJson(this);
+    return _$$ClienteImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _Cliente extends Cliente {
-  const factory _Cliente({
-    required final String id,
-    @JsonKey(name: 'tenant_id') required final String tenantId,
-    required final int codigo,
-    required final String cedula,
-    required final String nombre,
-    final String? direccion,
-    final String? telefono,
-    final String? sector,
-    final String? zona,
-    final String? barrio,
-    @JsonKey(name: 'tarifa_mensual') required final int tarifaMensual,
-    @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
-    final EstadoCliente estado,
-    @JsonKey(name: 'fecha_ingreso') required final DateTime fechaIngreso,
-    @JsonKey(name: 'fecha_retiro') final DateTime? fechaRetiro,
-    @JsonKey(name: 'deuda_inicial') final int deudaInicial,
-    final String? notas,
-    @JsonKey(name: 'created_at') final DateTime? createdAt,
-    @JsonKey(name: 'updated_at') final DateTime? updatedAt,
-  }) = _$ClienteImpl;
+  const factory _Cliente(
+      {required final String id,
+      @JsonKey(name: 'tenant_id') required final String tenantId,
+      required final int codigo,
+      required final String cedula,
+      required final String nombre,
+      final String? direccion,
+      final String? telefono,
+      final String? sector,
+      final String? zona,
+      final String? barrio,
+      @JsonKey(name: 'tarifa_mensual') required final int tarifaMensual,
+      @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
+      final EstadoCliente estado,
+      @JsonKey(name: 'fecha_ingreso') required final DateTime fechaIngreso,
+      @JsonKey(name: 'fecha_retiro') final DateTime? fechaRetiro,
+      @JsonKey(name: 'deuda_inicial') final int deudaInicial,
+      final String? notas,
+      @JsonKey(name: 'created_at') final DateTime? createdAt,
+      @JsonKey(name: 'updated_at') final DateTime? updatedAt}) = _$ClienteImpl;
   const _Cliente._() : super._();
 
   factory _Cliente.fromJson(Map<String, dynamic> json) = _$ClienteImpl.fromJson;

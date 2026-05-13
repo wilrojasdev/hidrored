@@ -18,6 +18,7 @@ extension EstadoFacturaVariant on EstadoFactura {
     EstadoFactura.pendiente => StatusVariant.warning,
     EstadoFactura.pagada => StatusVariant.success,
     EstadoFactura.anulada => StatusVariant.neutral,
+    EstadoFactura.refacturada => StatusVariant.info,
   };
 }
 

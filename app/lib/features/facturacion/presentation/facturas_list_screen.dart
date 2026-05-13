@@ -17,6 +17,18 @@ import '../../../domain/enums.dart';
 import '../../recibos/presentation/recibo_actions.dart';
 import 'facturas_controller.dart';
 
+/// Fecha de vencimiento (solo día) común a toda la lista, o null si hay más de una.
+DateTime? _fechaVencimientoComun(List<Factura> facturas) {
+  if (facturas.isEmpty) return null;
+  final first = facturas.first.fechaVencimiento;
+  final y0 = first.year, m0 = first.month, d0 = first.day;
+  for (final f in facturas.skip(1)) {
+    final v = f.fechaVencimiento;
+    if (v.year != y0 || v.month != m0 || v.day != d0) return null;
+  }
+  return DateTime(y0, m0, d0);
+}
+
 class FacturasListScreen extends ConsumerStatefulWidget {
   const FacturasListScreen({super.key});
 
@@ -68,7 +80,7 @@ class _FacturasListScreenState extends ConsumerState<FacturasListScreen> {
                   spacing: AppSpacing.sm,
                   runSpacing: AppSpacing.sm,
                   children: [
-                    _ImprimirLoteButton(asyncList: asyncList),
+                    _LoteRecibosButtons(asyncList: asyncList),
                     FilledButton.icon(
                       onPressed: () => context.go('/facturas/generar'),
                       icon: const Icon(Icons.playlist_add_check),
@@ -83,7 +95,7 @@ class _FacturasListScreenState extends ConsumerState<FacturasListScreen> {
               children: [
                 Text('Facturación', style: theme.textTheme.headlineMedium),
                 const Spacer(),
-                _ImprimirLoteButton(asyncList: asyncList),
+                _LoteRecibosButtons(asyncList: asyncList),
                 AppSpacing.gapMd,
                 FilledButton.icon(
                   onPressed: () => context.go('/facturas/generar'),
@@ -212,19 +224,32 @@ class _FacturasListScreenState extends ConsumerState<FacturasListScreen> {
                       ],
                     );
                   }
-                  return RefreshIndicator(
-                    onRefresh: () async {
-                      ref.invalidate(facturasListProvider);
-                      await ref.read(facturasListProvider.future);
-                    },
-                    child: ListView.separated(
-                      itemCount: filtrada.length,
-                      separatorBuilder: (_, _) => const Divider(height: 1),
-                      itemBuilder: (context, i) => _FacturaTile(
-                        factura: filtrada[i],
-                        cliente: clientesMap[filtrada[i].clienteId],
+                  final vencimientoComun = _fechaVencimientoComun(filtrada);
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (vencimientoComun != null) ...[
+                        _VencimientoComunBanner(fecha: vencimientoComun),
+                        AppSpacing.gapSm,
+                      ],
+                      Expanded(
+                        child: RefreshIndicator(
+                          onRefresh: () async {
+                            ref.invalidate(facturasListProvider);
+                            await ref.read(facturasListProvider.future);
+                          },
+                          child: ListView.separated(
+                            itemCount: filtrada.length,
+                            separatorBuilder: (_, _) =>
+                                const Divider(height: 1),
+                            itemBuilder: (context, i) => _FacturaTile(
+                              factura: filtrada[i],
+                              cliente: clientesMap[filtrada[i].clienteId],
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   );
                 },
               ),
@@ -236,8 +261,8 @@ class _FacturasListScreenState extends ConsumerState<FacturasListScreen> {
   }
 }
 
-class _ImprimirLoteButton extends ConsumerWidget {
-  const _ImprimirLoteButton({required this.asyncList});
+class _LoteRecibosButtons extends ConsumerWidget {
+  const _LoteRecibosButtons({required this.asyncList});
   final AsyncValue<List<Factura>> asyncList;
 
   @override
@@ -247,16 +272,72 @@ class _ImprimirLoteButton extends ConsumerWidget {
         final imprimibles = lista
             .where((f) => f.estado != EstadoFactura.anulada)
             .toList();
-        return OutlinedButton.icon(
-          onPressed: imprimibles.isEmpty
-              ? null
-              : () => ReciboActions.imprimirLote(context, ref, imprimibles),
-          icon: const Icon(Icons.print_outlined),
-          label: Text('Imprimir lote (${imprimibles.length})'),
+        final n = imprimibles.length;
+        final vacio = imprimibles.isEmpty;
+        return Wrap(
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
+          children: [
+            OutlinedButton.icon(
+              onPressed: vacio
+                  ? null
+                  : () => ReciboActions.imprimirLote(context, ref, imprimibles),
+              icon: const Icon(Icons.print_outlined),
+              label: Text('Imprimir lote ($n)'),
+            ),
+            OutlinedButton.icon(
+              onPressed: vacio
+                  ? null
+                  : () => ReciboActions.compartirLote(context, ref, imprimibles),
+              icon: const Icon(Icons.share_outlined),
+              label: Text('Compartir PDF ($n)'),
+            ),
+          ],
         );
       },
       loading: () => const SizedBox.shrink(),
       error: (_, _) => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _VencimientoComunBanner extends StatelessWidget {
+  const _VencimientoComunBanner({required this.fecha});
+
+  final DateTime fecha;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(AppSizes.radiusSm),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.xl,
+          vertical: AppSpacing.sm,
+        ),
+        child: Row(
+          children: [
+            Icon(
+              Icons.event_outlined,
+              size: 20,
+              color: theme.colorScheme.primary,
+            ),
+            AppSpacing.gapSm,
+            Expanded(
+              child: Text(
+                'Vencimiento: ${formatFecha(fecha)}',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -283,55 +364,60 @@ class _FacturaTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isMobile =
-        MediaQuery.sizeOf(context).width < AppSizes.mobileBreakpoint;
+    final nombreCliente = cliente?.nombre ?? 'Cliente';
     return Semantics(
       button: true,
       label:
-          'Factura ${factura.numero}, ${cliente?.nombre ?? 'cliente'}, '
+          'Factura ${factura.numero}, $nombreCliente, '
           'estado ${factura.estado.label}, ${formatPesos(factura.total)}',
       child: ListTile(
-        title: Wrap(
-          spacing: AppSpacing.sm,
-          runSpacing: AppSpacing.xs,
-          crossAxisAlignment: WrapCrossAlignment.center,
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              factura.numero,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontFeatures: [FontFeature.tabularFigures()],
+            Expanded(
+              child: Text(
+                nombreCliente,
+                style: const TextStyle(fontWeight: FontWeight.w500),
               ),
             ),
-            StatusChip(
-              label: factura.estado.label,
-              variant: factura.estado.variant,
-              compact: true,
+            AppSpacing.gapSm,
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                StatusChip(
+                  label: factura.estado.label,
+                  variant: factura.estado.variant,
+                  compact: true,
+                ),
+                if (factura.tipo == TipoFactura.recordatorioSuspension) ...[
+                  AppSpacing.gapXs,
+                  const StatusChip(
+                    label: 'Suspendido',
+                    variant: StatusVariant.warning,
+                    compact: true,
+                    icon: Icons.block,
+                  ),
+                ],
+              ],
             ),
-            if (factura.tipo == TipoFactura.recordatorioSuspension)
-              const StatusChip(
-                label: 'Suspendido',
-                variant: StatusVariant.warning,
-                compact: true,
-                icon: Icons.block,
-              ),
           ],
         ),
         subtitle: Text(
-          '${cliente?.nombre ?? 'Cliente'} · '
-          '${formatPeriodo(factura.periodo)} · '
-          'Vence ${formatFecha(factura.fechaVencimiento)}',
+          '${factura.numero} · ${formatPeriodo(factura.periodo)}',
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
         ),
-        isThreeLine: isMobile,
+        isThreeLine: true,
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               formatPesos(factura.total),
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
+              style: AppListTypography.monto(
+                theme,
                 color: factura.estado == EstadoFactura.anulada
                     ? theme.colorScheme.outline
                     : null,

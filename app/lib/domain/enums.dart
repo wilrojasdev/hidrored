@@ -47,7 +47,8 @@ enum TipoFactura {
 enum EstadoFactura {
   pendiente('pendiente'),
   pagada('pagada'),
-  anulada('anulada');
+  anulada('anulada'),
+  refacturada('refacturada');
 
   const EstadoFactura(this.value);
   final String value;
@@ -59,6 +60,7 @@ enum EstadoFactura {
     EstadoFactura.pendiente => 'Pendiente',
     EstadoFactura.pagada => 'Pagada',
     EstadoFactura.anulada => 'Anulada',
+    EstadoFactura.refacturada => 'Refacturada',
   };
 }
 

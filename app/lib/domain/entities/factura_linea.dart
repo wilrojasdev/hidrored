@@ -14,6 +14,7 @@ class FacturaLinea with _$FacturaLinea {
     @Default(1) int cantidad,
     @JsonKey(name: 'valor_unitario') required int valorUnitario,
     required int subtotal,
+    @JsonKey(name: 'factura_origen_id') String? facturaOrigenId,
     @JsonKey(name: 'created_at') DateTime? createdAt,
   }) = _FacturaLinea;
 

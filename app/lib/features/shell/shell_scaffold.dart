@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/app_info.dart';
 import '../../core/connectivity/connectivity_provider.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/widgets/confirm_dialog.dart';
 import '../../core/widgets/offline_banner.dart';
+import '../../core/widgets/tenant_logo.dart';
+import '../../data/tenant_provider.dart';
 import '../auth/presentation/auth_controller.dart';
 import 'nav_destinations.dart';
 
@@ -13,7 +17,7 @@ import 'nav_destinations.dart';
 /// - Pantallas anchas (>= 800dp): NavigationRail a la izquierda con todos los
 ///   destinos siempre visibles.
 /// - Pantallas angostas: AppBar + Drawer con todos los destinos + bottom nav
-///   con los 4 más usados (Dashboard, Clientes, Facturación, Pagos) y un
+///   con los 4 más usados (Pagos, Dashboard, Clientes, Facturación) y un
 ///   ítem "Más" que abre el drawer.
 class ShellScaffold extends ConsumerWidget {
   const ShellScaffold({super.key, required this.child});
@@ -52,8 +56,7 @@ class ShellScaffold extends ConsumerWidget {
               extended: extended,
               selected: selected,
               onSelect: (i) => _onSelect(context, i),
-              onSignOut: () =>
-                  ref.read(authControllerProvider.notifier).signOut(),
+              onSignOut: () => _confirmarCerrarSesion(context, ref),
             ),
             Container(width: 1, color: theme.colorScheme.outlineVariant),
             Expanded(
@@ -80,10 +83,24 @@ class ShellScaffold extends ConsumerWidget {
       perfilNombre: perfil?.nombre,
       isOffline: isOffline,
       onSelect: (i) => _onSelect(context, i),
-      onSignOut: () => ref.read(authControllerProvider.notifier).signOut(),
+      onSignOut: () => _confirmarCerrarSesion(context, ref),
       child: child,
     );
   }
+}
+
+Future<void> _confirmarCerrarSesion(BuildContext context, WidgetRef ref) async {
+  final ok = await confirm(
+    context,
+    titulo: '¿Cerrar sesión?',
+    mensaje:
+        'Tendrás que iniciar sesión de nuevo para usar el sistema.',
+    confirmar: 'Cerrar sesión',
+    cancelar: 'Cancelar',
+    icono: Icons.logout,
+  );
+  if (!ok || !context.mounted) return;
+  await ref.read(authControllerProvider.notifier).signOut();
 }
 
 class _SideRail extends StatelessWidget {
@@ -132,24 +149,41 @@ class _SideRail extends StatelessWidget {
               color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.sm,
-                vertical: AppSpacing.sm,
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.sm,
+                AppSpacing.sm,
+                AppSpacing.sm,
+                AppSpacing.md,
               ),
-              child: extended
-                  ? OutlinedButton.icon(
-                      onPressed: onSignOut,
-                      icon: const Icon(Icons.logout, size: 18),
-                      label: const Text('Cerrar sesión'),
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(44),
-                      ),
-                    )
-                  : IconButton(
-                      tooltip: 'Cerrar sesión',
-                      onPressed: onSignOut,
-                      icon: const Icon(Icons.logout),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  extended
+                      ? OutlinedButton.icon(
+                          onPressed: onSignOut,
+                          icon: const Icon(Icons.logout, size: 18),
+                          label: const Text('Cerrar sesión'),
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: const Size.fromHeight(44),
+                          ),
+                        )
+                      : IconButton(
+                          tooltip: 'Cerrar sesión',
+                          onPressed: onSignOut,
+                          icon: const Icon(Icons.logout),
+                        ),
+                  AppSpacing.gapXs,
+                  Text(
+                    kAppVersionLabel,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -158,29 +192,17 @@ class _SideRail extends StatelessWidget {
   }
 }
 
-class _Brand extends StatelessWidget {
+class _Brand extends ConsumerWidget {
   const _Brand({required this.extended});
 
   final bool extended;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final logo = Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        gradient: AppGradients.header(context),
-        borderRadius: BorderRadius.circular(AppSizes.radiusSm),
-      ),
-      alignment: Alignment.center,
-      child: Icon(
-        Icons.water_drop,
-        color: theme.colorScheme.onPrimary,
-        size: 22,
-        semanticLabel: 'Hidrored',
-      ),
-    );
+    final raw = ref.watch(tenantProvider).valueOrNull?.nombre;
+    final titulo = (raw == null || raw.trim().isEmpty) ? kAppDisplayName : raw.trim();
+    final logo = const TenantLogo(size: 40);
     if (!extended) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
@@ -199,26 +221,12 @@ class _Brand extends StatelessWidget {
           logo,
           AppSpacing.gapMd,
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Hidrored',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -0.2,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  'Acueducto veredal',
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+            child: Text(
+              titulo,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w800,
+                letterSpacing: -0.2,
+              ),
             ),
           ),
         ],
@@ -316,7 +324,7 @@ class _RailTile extends StatelessWidget {
   }
 }
 
-class _MobileShell extends StatefulWidget {
+class _MobileShell extends ConsumerStatefulWidget {
   const _MobileShell({
     required this.selected,
     required this.perfilNombre,
@@ -334,10 +342,10 @@ class _MobileShell extends StatefulWidget {
   final Widget child;
 
   @override
-  State<_MobileShell> createState() => _MobileShellState();
+  ConsumerState<_MobileShell> createState() => _MobileShellState();
 }
 
-class _MobileShellState extends State<_MobileShell> {
+class _MobileShellState extends ConsumerState<_MobileShell> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -361,22 +369,14 @@ class _MobileShellState extends State<_MobileShell> {
         title: Row(
           children: [
             if (isInBottom) ...[
-              Container(
-                width: 28,
-                height: 28,
-                decoration: BoxDecoration(
-                  gradient: AppGradients.header(context),
-                  borderRadius: BorderRadius.circular(AppSizes.radiusSm),
-                ),
-                alignment: Alignment.center,
-                child: Icon(
-                  Icons.water_drop,
-                  color: theme.colorScheme.onPrimary,
-                  size: 16,
+              const TenantLogo(size: 28),
+              AppSpacing.gapSm,
+              Expanded(
+                child: Text(
+                  ref.watch(tenantProvider).valueOrNull?.nombre ?? kAppDisplayName,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              AppSpacing.gapSm,
-              const Text('Hidrored'),
             ] else
               Text(selectedLabel),
           ],
@@ -445,7 +445,7 @@ class _MobileShellState extends State<_MobileShell> {
   }
 }
 
-class _AppDrawer extends StatelessWidget {
+class _AppDrawer extends ConsumerWidget {
   const _AppDrawer({
     required this.selectedIndex,
     required this.onSelect,
@@ -459,8 +459,9 @@ class _AppDrawer extends StatelessWidget {
   final String? perfilNombre;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final titulo = ref.watch(tenantProvider).valueOrNull?.nombre ?? kAppDisplayName;
     return Drawer(
       child: SafeArea(
         child: Column(
@@ -472,25 +473,13 @@ class _AppDrawer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.onPrimary.withValues(
-                        alpha: 0.18,
-                      ),
-                      borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-                    ),
-                    alignment: Alignment.center,
-                    child: Icon(
-                      Icons.water_drop,
-                      color: theme.colorScheme.onPrimary,
-                      size: 24,
-                    ),
+                  TenantLogo(
+                    size: 44,
+                    borderRadius: BorderRadius.circular(AppSizes.radiusMd),
                   ),
                   AppSpacing.gapMd,
                   Text(
-                    'Hidrored',
+                    titulo,
                     style: theme.textTheme.titleLarge?.copyWith(
                       color: theme.colorScheme.onPrimary,
                       fontWeight: FontWeight.w800,
@@ -540,6 +529,12 @@ class _AppDrawer extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text('Cerrar sesión'),
+              subtitle: Text(
+                kAppVersionLabel,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
               onTap: onSignOut,
             ),
             AppSpacing.gapSm,

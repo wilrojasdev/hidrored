@@ -27,7 +27,7 @@ class ConfiguracionScreen extends ConsumerWidget {
     return Padding(
       padding: isMobile ? AppSpacing.pagePaddingMobile : AppSpacing.pagePadding,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
             'Configuración',
@@ -47,18 +47,32 @@ class ConfiguracionScreen extends ConsumerWidget {
             child: AsyncValueWidget<Tenant>(
               value: asyncTenant,
               onRetry: () => ref.invalidate(tenantProvider),
-              data: (t) => SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 760),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _ConfigForm(tenant: t),
-                      AppSpacing.gapLg,
-                      const BackupCard(),
-                    ],
-                  ),
-                ),
+              data: (t) => LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    primary: false,
+                    physics: const ClampingScrollPhysics(),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: constraints.maxWidth,
+                        maxWidth: constraints.maxWidth,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: AppSpacing.xxl,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            _ConfigForm(tenant: t),
+                            AppSpacing.gapLg,
+                            const BackupCard(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ),

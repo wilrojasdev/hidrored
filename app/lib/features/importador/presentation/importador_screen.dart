@@ -371,9 +371,9 @@ class _Instrucciones extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             const Text(
-              '• Obligatorias: cedula, nombre, tarifa.\n'
+              '• Obligatorias en cada fila: cedula, nombre, direccion, tarifa.\n'
               '• Si dejas codigo vacío, se auto-asigna el siguiente consecutivo.\n'
-              '• Las columnas opcionales pueden quedar vacías.\n'
+              '• Opcionales (pueden quedar vacías): telefono, sector, zona, barrio, notas.\n'
               '• deuda_inicial es el saldo previo al sistema (queda como factura inicial pendiente — feature futura, hoy se guarda como referencia).',
             ),
           ],

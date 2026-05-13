@@ -29,6 +29,23 @@ String formatFecha(DateTime fecha) {
   return DateFormat('dd/MM/yyyy').format(fecha);
 }
 
+/// Fecha larga en español (Colombia), p. ej. "jueves, 25 de marzo de 2025".
+/// Sin [horaRegistro], no se muestra hora (útil si solo importa el día).
+String formatFechaLarga(DateTime fecha) {
+  final raw = DateFormat("EEEE, d 'de' MMMM 'de' y", 'es_CO').format(fecha);
+  if (raw.isEmpty) return raw;
+  return raw[0].toLowerCase() + raw.substring(1);
+}
+
+/// Igual que [formatFechaLarga] y, si [horaRegistro] no es null, la hora en
+/// formato de 12 h con minutos (p. ej. "9:07 a. m.", locale `es_CO`).
+String formatFechaLargaHora(DateTime fecha, {DateTime? horaRegistro}) {
+  final base = formatFechaLarga(fecha);
+  if (horaRegistro == null) return base;
+  final hora = DateFormat.jm('es_CO').format(horaRegistro);
+  return '$base, $hora';
+}
+
 /// Formatea periodo "2025-05" -> "Mayo 2025".
 String formatPeriodo(String periodo) {
   final parts = periodo.split('-');

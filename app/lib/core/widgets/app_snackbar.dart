@@ -7,38 +7,46 @@ class AppSnackbar {
   const AppSnackbar._();
 
   static void success(BuildContext context, String message) {
+    final scheme = Theme.of(context).colorScheme;
     _show(
       context,
       message: message,
       icon: Icons.check_circle_outline,
-      backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+      backgroundColor: scheme.inverseSurface,
+      foregroundColor: scheme.onInverseSurface,
     );
   }
 
   static void info(BuildContext context, String message) {
+    final scheme = Theme.of(context).colorScheme;
     _show(
       context,
       message: message,
       icon: Icons.info_outline,
-      backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+      backgroundColor: scheme.inverseSurface,
+      foregroundColor: scheme.onInverseSurface,
     );
   }
 
   static void error(BuildContext context, Object error) {
+    final scheme = Theme.of(context).colorScheme;
     _show(
       context,
       message: userMessageFor(error),
       icon: Icons.error_outline,
-      backgroundColor: Theme.of(context).colorScheme.error,
+      backgroundColor: scheme.error,
+      foregroundColor: scheme.onError,
     );
   }
 
   static void errorMessage(BuildContext context, String message) {
+    final scheme = Theme.of(context).colorScheme;
     _show(
       context,
       message: message,
       icon: Icons.error_outline,
-      backgroundColor: Theme.of(context).colorScheme.error,
+      backgroundColor: scheme.error,
+      foregroundColor: scheme.onError,
     );
   }
 
@@ -47,6 +55,7 @@ class AppSnackbar {
     required String message,
     required IconData icon,
     required Color backgroundColor,
+    required Color foregroundColor,
   }) {
     final messenger = ScaffoldMessenger.maybeOf(context);
     if (messenger == null) return;
@@ -55,10 +64,13 @@ class AppSnackbar {
       SnackBar(
         content: Row(
           children: [
-            Icon(icon, color: Colors.white, size: 18),
+            Icon(icon, color: foregroundColor, size: 18),
             const SizedBox(width: 12),
             Expanded(
-              child: Text(message, style: const TextStyle(color: Colors.white)),
+              child: Text(
+                message,
+                style: TextStyle(color: foregroundColor),
+              ),
             ),
           ],
         ),

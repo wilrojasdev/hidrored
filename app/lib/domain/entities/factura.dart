@@ -27,6 +27,7 @@ class Factura with _$Factura {
     @Default(EstadoFactura.pendiente)
     EstadoFactura estado,
     @JsonKey(name: 'motivo_anulacion') String? motivoAnulacion,
+    @JsonKey(name: 'refacturada_en_id') String? refacturadaEnId,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _Factura;

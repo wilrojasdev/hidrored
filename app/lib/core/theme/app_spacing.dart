@@ -57,3 +57,20 @@ class AppDurations {
   static const Duration slow = Duration(milliseconds: 360);
   static const Duration searchDebounce = Duration(milliseconds: 300);
 }
+
+/// Tipografía destacada para montos en filas de listas (pagos, facturas,
+/// tarifas en clientes).
+class AppListTypography {
+  const AppListTypography._();
+
+  static TextStyle monto(ThemeData theme, {Color? color}) {
+    final base =
+        theme.textTheme.titleLarge ?? theme.textTheme.titleMedium ?? const TextStyle();
+    return base.copyWith(
+      fontWeight: FontWeight.w700,
+      letterSpacing: -0.25,
+      height: 1.15,
+      color: color,
+    );
+  }
+}

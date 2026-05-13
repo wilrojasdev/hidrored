@@ -4,6 +4,7 @@ import 'package:printing/printing.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/extensions/formato.dart';
+import '../../../core/widgets/app_snackbar.dart';
 import '../../../domain/entities/factura.dart';
 import '../data/recibo_data_loader.dart';
 import '../domain/recibo_data.dart';
@@ -56,14 +57,11 @@ class ReciboActions {
     if (telE164 == null) {
       if (!context.mounted) return;
       final telOriginal = data.cliente.telefono;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            telOriginal == null || telOriginal.isEmpty
-                ? 'Este cliente no tiene teléfono registrado.'
-                : 'El teléfono del cliente no es válido para WhatsApp.',
-          ),
-        ),
+      AppSnackbar.info(
+        context,
+        telOriginal == null || telOriginal.isEmpty
+            ? 'Este cliente no tiene teléfono registrado.'
+            : 'El teléfono del cliente no es válido para WhatsApp.',
       );
       return;
     }
@@ -73,9 +71,7 @@ class ReciboActions {
     );
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No se pudo abrir WhatsApp')),
-      );
+      AppSnackbar.errorMessage(context, 'No se pudo abrir WhatsApp');
     }
   }
 

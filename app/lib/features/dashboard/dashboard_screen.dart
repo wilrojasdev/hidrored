@@ -188,7 +188,7 @@ class _OnboardingCard extends StatelessWidget {
             ),
             AppSpacing.gapSm,
             Text(
-              'Para empezar a usar Hidrored sigue estos pasos:',
+              'Para empezar a usar HidroRed sigue estos pasos:',
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),

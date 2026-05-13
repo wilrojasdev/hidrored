@@ -17,22 +17,24 @@ import 'preview_facturacion.dart';
 
 /// Logica de negocio del ciclo de facturacion.
 ///
-/// Reglas implementadas:
-/// - El recibo del mes se emite el ultimo dia del mes (o cuando el admin
-///   ejecuta la facturacion masiva).
-/// - Vencimiento = fecha_emision + N dias habiles (segun tenant.diasHabiles).
-/// - Mora: por cada factura pendiente, se cuentan los dias calendario
-///   desde el dia siguiente a su vencimiento hasta hoy. Suma de dias x
-///   tarifa_mora_diaria.
-/// - La mora ya cobrada en facturas pendientes anteriores se descuenta
-///   para evitar doble cobro.
-/// - Cliente activo: factura mensual con valor_mensualidad y mora.
+/// Modelo: "factura unica viva por cliente". Cada cliente tiene a lo
+/// sumo UNA factura `pendiente` a la vez. Al emitir un periodo nuevo,
+/// las facturas `pendiente` anteriores pasan a `refacturada` server-side
+/// y su saldo se inserta como lineas en la nueva (con
+/// `factura_origen_id`). El cliente Dart calcula el preview leyendo el
+/// estado actual y el RPC garantiza la consistencia atomica.
+///
+/// Reglas:
+/// - Vencimiento = fecha_emision + N dias habiles (segun tenant).
+/// - Mora: sub-deuda por sub-deuda, descontando lo ya facturado para
+///   evitar doble cobro. Ver [MoraCalculator].
+/// - Cliente activo: factura mensual con tarifa_mensual + mora.
 /// - Cliente suspendido: factura "recordatorio_suspension" con mora +
 ///   costo_reconexion (sin nueva mensualidad).
-/// - Cliente retirado: no se le emite factura.
-/// - Cargos extra (conceptos) en cola del cliente se incluyen como
-///   líneas adicionales y quedan marcados como aplicados a esta factura.
-///   Si la factura se anula, vuelven a estar pendientes.
+/// - Cliente retirado: no se le emite factura (el RPC lo bloquea).
+/// - Cargos extra (conceptos) en cola: incluidos como lineas con
+///   `cargo_pendiente_id`. El RPC los marca aplicados atomicamente y
+///   aborta si ya fueron aplicados (anti doble-cobro).
 class BillingService {
   BillingService({
     required SupabaseClient client,
@@ -57,6 +59,9 @@ class BillingService {
     final clientes = await _cargarClientesNoRetirados();
     final pendientes = await _cargarFacturasPendientes();
     final cargos = await _cargosRepo.listPendientesDelTenant();
+    final saldosPagados = await _cargarSaldosPagados(
+      pendientes.map((f) => f.id).toList(),
+    );
 
     final pendientesPorCliente = <String, List<Factura>>{};
     for (final f in pendientes) {
@@ -72,6 +77,7 @@ class BillingService {
         cliente: s,
         facturasPendientes: pendientesPorCliente[s.id] ?? const [],
         cargosExtras: cargosPorCliente[s.id] ?? const [],
+        saldosPagadosPorFactura: saldosPagados,
         fechaEmision: fechaEmision,
       );
     }).toList();
@@ -80,7 +86,7 @@ class BillingService {
   // ---------- Preview individual ----------
 
   /// Calcula el preview de UN solo cliente (para "Generar factura
-  /// individual" o "Re-emitir tras anulación").
+  /// individual" o "Re-emitir tras anulacion").
   Future<PreviewFacturaCliente> previewFacturaIndividual({
     required String clienteId,
     required String periodo,
@@ -92,11 +98,15 @@ class BillingService {
     }
     final pendientes = await _cargarFacturasPendientesCliente(clienteId);
     final cargos = await _cargosRepo.listPorCliente(clienteId);
+    final saldosPagados = await _cargarSaldosPagados(
+      pendientes.map((f) => f.id).toList(),
+    );
 
     return _construirPreview(
       cliente: cliente,
       facturasPendientes: pendientes,
       cargosExtras: cargos,
+      saldosPagadosPorFactura: saldosPagados,
       fechaEmision: fechaEmision,
     );
   }
@@ -104,8 +114,8 @@ class BillingService {
   // ---------- Ejecutar masivo ----------
 
   /// Ejecuta la facturacion masiva. Devuelve la cantidad de facturas
-  /// creadas. Usa el RPC `generar_facturacion_masiva` que omite
-  /// silenciosamente clientes con factura no-anulada del mismo periodo.
+  /// creadas. Recalcula el preview justo antes de armar el payload para
+  /// que la mora y los saldos refacturados reflejen el estado actual.
   Future<int> ejecutarFacturacion({
     required String periodo,
     required DateTime fechaEmision,
@@ -140,16 +150,26 @@ class BillingService {
 
   // ---------- Ejecutar individual ----------
 
-  /// Emite UNA factura para un cliente específico. Falla si ya existe
-  /// factura no-anulada del mismo periodo.
+  /// Emite UNA factura para un cliente especifico. **Re-calcula el
+  /// preview** server-trip para evitar emitir con datos viejos. Falla si
+  /// ya existe factura no-anulada del mismo periodo.
   Future<void> ejecutarFacturaIndividual({
     required PreviewFacturaCliente preview,
     required String periodo,
     required DateTime fechaEmision,
   }) async {
-    if (!preview.tieneCargos) {
+    // Re-calcular preview para minimizar drift entre lo que el usuario
+    // vio y lo que se emite. Si entre la pantalla y el "Confirmar"
+    // pasaron pagos, cargos nuevos o cambios de estado, el preview
+    // fresco los refleja.
+    final fresh = await previewFacturaIndividual(
+      clienteId: preview.cliente.id,
+      periodo: periodo,
+      fechaEmision: fechaEmision,
+    );
+    if (!fresh.tieneCargos) {
       throw StateError(
-        'No hay cargos para facturar a ${preview.cliente.nombre}.',
+        'No hay cargos para facturar a ${fresh.cliente.nombre}.',
       );
     }
     final fechaVencimiento = FestivosColombia.sumarDiasHabiles(
@@ -162,12 +182,33 @@ class BillingService {
         'p_periodo': periodo,
         'p_fecha_emision': _toDateOnly(fechaEmision),
         'p_fecha_vencimiento': _toDateOnly(fechaVencimiento),
-        'p_factura': _payloadFactura(preview, periodo),
+        'p_factura': _payloadFactura(fresh, periodo),
       },
     );
   }
 
   // ---------- privados ----------
+
+  /// Devuelve un mapa `factura_id -> sum(monto_aplicado)` para las
+  /// facturas dadas. Si una factura no tiene pagos, no aparece (default 0).
+  Future<Map<String, int>> _cargarSaldosPagados(
+    List<String> facturaIds,
+  ) async {
+    if (facturaIds.isEmpty) return const {};
+    final data = await _client
+        .from('pago_factura')
+        .select('factura_id, monto_aplicado')
+        .eq('tenant_id', _tenantId)
+        .inFilter('factura_id', facturaIds);
+    final map = <String, int>{};
+    for (final row in data as List) {
+      final r = row as Map<String, dynamic>;
+      final id = r['factura_id'] as String;
+      final monto = r['monto_aplicado'] as int;
+      map[id] = (map[id] ?? 0) + monto;
+    }
+    return map;
+  }
 
   Map<String, dynamic> _payloadFactura(
     PreviewFacturaCliente p,
@@ -208,12 +249,22 @@ class BillingService {
         'subtotal': c.subtotal,
       });
     }
+
+    // Importante: el cliente NO envia las lineas refacturadas. El RPC
+    // las inserta server-side al absorber las facturas pendientes
+    // anteriores y recalcula `total` como suma real de lineas. Lo que
+    // mandamos como `total` es solo orientativo (el RPC lo sobrescribe).
+    final totalNativo = p.valorMensualidad +
+        p.valorMora +
+        p.costoReconexion +
+        p.totalCargosExtras;
+
     return {
       'cliente_id': p.cliente.id,
       'tipo': p.tipo.value,
       'valor_mensualidad': p.valorMensualidad,
       'valor_mora': p.valorMora,
-      'total': p.totalFacturaNueva,
+      'total': totalNativo,
       'lineas': lineas,
     };
   }
@@ -222,6 +273,7 @@ class BillingService {
     required Cliente cliente,
     required List<Factura> facturasPendientes,
     required List<CargoPendiente> cargosExtras,
+    required Map<String, int> saldosPagadosPorFactura,
     required DateTime fechaEmision,
   }) {
     final esSuspendido =
@@ -232,13 +284,37 @@ class BillingService {
         ? TipoFactura.recordatorioSuspension
         : TipoFactura.mensual;
 
-    final totalAtrasos = facturasPendientes.fold<int>(
-      0,
-      (sum, f) => sum + f.total,
-    );
+    // Construir lineasRefacturadas con saldo neto.
+    final lineasRefacturadas = <SaldoRefacturado>[];
+    for (final f in facturasPendientes) {
+      final pagado = saldosPagadosPorFactura[f.id] ?? 0;
+      final saldo = f.total - pagado;
+      if (saldo <= 0) continue;
+      lineasRefacturadas.add(SaldoRefacturado(
+        facturaOrigenId: f.id,
+        numero: f.numero,
+        periodo: f.periodo,
+        fechaVencimiento: f.fechaVencimiento,
+        moraYaFacturadaEnOrigen: f.valorMora,
+        saldo: saldo,
+      ));
+    }
 
+    // Mora: descomposicion en sub-deudas. Como aun NO se ha emitido la
+    // nueva factura, las sub-deudas son las facturas pendientes
+    // existentes, cada una con su fecha de vencimiento. Si las
+    // pendientes a su vez vienen de absorbidas (caso recursivo poco
+    // comun), tendriamos que cargar sus origenes; lo dejamos para
+    // iteracion futura. Por ahora: 1 sub-deuda por factura pendiente.
+    final deudas = [
+      for (final f in facturasPendientes)
+        DeudaParaMora(
+          fechaVencimiento: f.fechaVencimiento,
+          moraYaFacturada: f.valorMora,
+        ),
+    ];
     final valorMora = MoraCalculator.aCobrar(
-      facturasPendientes: facturasPendientes,
+      deudas: deudas,
       hasta: fechaEmision,
       tarifaMoraDiaria: tenant.tarifaMoraDiaria,
     );
@@ -249,12 +325,11 @@ class BillingService {
     return PreviewFacturaCliente(
       cliente: cliente,
       tipo: tipo,
-      totalAtrasos: totalAtrasos,
-      cantidadAtrasos: facturasPendientes.length,
       valorMensualidad: valorMensualidad,
       valorMora: valorMora,
       costoReconexion: costoReconexion,
       cargosExtras: cargosExtras,
+      lineasRefacturadas: lineasRefacturadas,
     );
   }
 

@@ -54,7 +54,7 @@ class _BackupCardState extends ConsumerState<BackupCard> {
             name: result.filename,
             mimeType: 'application/json',
           ),
-        ], subject: 'Backup hidrored');
+        ], subject: 'Backup HidroRed');
       } else {
         // Desktop: dialog "Guardar como"
         final path = await FilePicker.platform.saveFile(

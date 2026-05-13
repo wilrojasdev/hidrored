@@ -10,9 +10,9 @@ import 'fila_importacion.dart';
 ///   codigo | cedula | nombre | direccion | telefono | sector | zona |
 ///   barrio | tarifa | deuda_inicial | notas
 ///
-/// Las columnas opcionales (direccion, telefono, sector, zona, barrio,
-/// notas) pueden quedar vacias. Las obligatorias son cedula, nombre y
-/// tarifa. Si codigo viene vacio, se asigna consecutivo automaticamente.
+/// Las columnas opcionales (telefono, sector, zona, barrio, notas) pueden
+/// quedar vacias. Las obligatorias son cedula, nombre, direccion y tarifa.
+/// Si codigo viene vacio, se asigna consecutivo automaticamente.
 class ExcelImporter {
   const ExcelImporter._();
 
@@ -50,7 +50,7 @@ class ExcelImporter {
     }
 
     // Validar columnas obligatorias.
-    const obligatorias = {'cedula', 'nombre', 'tarifa'};
+    const obligatorias = {'cedula', 'nombre', 'direccion', 'tarifa'};
     final faltantes = obligatorias.where((c) => !mapeo.containsKey(c)).toList();
     if (faltantes.isNotEmpty) {
       throw FormatException(
@@ -102,6 +102,9 @@ class ExcelImporter {
       }
       if (f.nombre == null || f.nombre!.trim().isEmpty) {
         f.errores.add('Nombre obligatorio');
+      }
+      if (f.direccion == null || f.direccion!.trim().isEmpty) {
+        f.errores.add('Dirección obligatoria');
       }
       if (f.tarifa == null) {
         f.errores.add('Tarifa obligatoria');

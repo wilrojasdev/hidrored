@@ -83,5 +83,37 @@ void main() {
         expect(r, DateTime(2025, 1, 15));
       },
     );
+
+    test('diasHabilesTrasVencimiento: dia de vencimiento no cuenta', () {
+      expect(
+        FestivosColombia.diasHabilesTrasVencimiento(
+          DateTime(2025, 5, 14),
+          DateTime(2025, 5, 14),
+        ),
+        0,
+      );
+    });
+
+    test('diasHabilesTrasVencimiento: primer dia despues habil suma 1', () {
+      expect(
+        FestivosColombia.diasHabilesTrasVencimiento(
+          DateTime(2025, 5, 13),
+          DateTime(2025, 5, 14),
+        ),
+        1,
+      );
+    });
+
+    test('diasHabilesTrasVencimiento: salta sabado y domingo', () {
+      // Vence vie 9 may 2025; primer dia calendario tras vence: sab 10 (no habil),
+      // dom 11 (no), lun 12 (habil). Hasta lun 12 -> 1 dia habil.
+      expect(
+        FestivosColombia.diasHabilesTrasVencimiento(
+          DateTime(2025, 5, 9),
+          DateTime(2025, 5, 12),
+        ),
+        1,
+      );
+    });
   });
 }

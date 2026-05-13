@@ -2,7 +2,7 @@ name: hidrored
 description: "Sistema de gestion para acueductos veredales (offline-first)"
 publish_to: 'none'
 
-version: 0.1.0+1
+version: 1.0.2+1
 
 environment:
   sdk: ^3.11.5
@@ -72,9 +72,19 @@ dev_dependencies:
   # Lints adicionales
   riverpod_lint: ^2.3.10
   custom_lint: ^0.6.4
+  flutter_launcher_icons: ^0.14.3
 
 flutter:
   uses-material-design: true
   assets:
     - assets/images/
     - assets/fonts/
+
+flutter_launcher_icons:
+  image_path: assets/images/tenant_default_logo.png
+  android: true
+  ios: false
+  macos:
+    generate: true
+  windows:
+    generate: true

@@ -30,7 +30,7 @@ class FacturaDetalleScreen extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
             children: [
@@ -66,12 +66,21 @@ class _DetailBody extends ConsumerWidget {
     final asyncCliente = ref.watch(clienteDetailProvider(factura.clienteId));
     final asyncLineas = ref.watch(facturaLineasProvider(factura.id));
 
-    return SingleChildScrollView(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 720),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          primary: false,
+          physics: const ClampingScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: constraints.maxWidth,
+              maxWidth: constraints.maxWidth,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(24),
@@ -158,6 +167,88 @@ class _DetailBody extends ConsumerWidget {
                         value: factura.motivoAnulacion!,
                       ),
                     ],
+                    if (factura.estado == EstadoFactura.refacturada) ...[
+                      const SizedBox(height: 12),
+                      Container(
+                        padding: const EdgeInsets.all(AppSpacing.md),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.secondaryContainer,
+                          borderRadius: BorderRadius.circular(
+                            AppSizes.radiusSm,
+                          ),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.merge_type,
+                              color: theme.colorScheme.onSecondaryContainer,
+                            ),
+                            const SizedBox(width: AppSpacing.md),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Esta factura fue refacturada',
+                                    style: theme.textTheme.titleSmall?.copyWith(
+                                      color: theme
+                                          .colorScheme
+                                          .onSecondaryContainer,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    'Su saldo se cobró en una factura '
+                                    'posterior. No recibe nuevos pagos. '
+                                    'Si necesitas revertir, anula la '
+                                    'factura que la absorbió.',
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: theme
+                                          .colorScheme
+                                          .onSecondaryContainer,
+                                    ),
+                                  ),
+                                  if (factura.refacturadaEnId != null) ...[
+                                    const SizedBox(height: 8),
+                                    InkWell(
+                                      onTap: () => context.go(
+                                        '/facturas/${factura.refacturadaEnId}',
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.arrow_forward,
+                                            size: 14,
+                                            color: theme
+                                                .colorScheme
+                                                .onSecondaryContainer,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            'Ver factura que la absorbió',
+                                            style: TextStyle(
+                                              color: theme
+                                                  .colorScheme
+                                                  .onSecondaryContainer,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -242,7 +333,10 @@ class _DetailBody extends ConsumerWidget {
             ),
           ],
         ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -329,11 +423,41 @@ class _LineaRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final esRefacturada = linea.facturaOrigenId != null;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(child: Text(linea.descripcion)),
+          if (esRefacturada) ...[
+            Tooltip(
+              message: 'Saldo refacturado de una factura anterior',
+              child: Icon(
+                Icons.history,
+                size: 18,
+                color: theme.colorScheme.secondary,
+              ),
+            ),
+            const SizedBox(width: 8),
+          ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(linea.descripcion),
+                if (esRefacturada)
+                  Text(
+                    'Refacturado',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.secondary,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+              ],
+            ),
+          ),
           if (linea.cantidad > 1) ...[
             Text('${linea.cantidad}× '),
             const SizedBox(width: 8),

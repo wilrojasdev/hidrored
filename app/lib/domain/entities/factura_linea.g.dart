@@ -16,6 +16,7 @@ _$FacturaLineaImpl _$$FacturaLineaImplFromJson(Map<String, dynamic> json) =>
       cantidad: (json['cantidad'] as num?)?.toInt() ?? 1,
       valorUnitario: (json['valor_unitario'] as num).toInt(),
       subtotal: (json['subtotal'] as num).toInt(),
+      facturaOrigenId: json['factura_origen_id'] as String?,
       createdAt: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
@@ -31,5 +32,6 @@ Map<String, dynamic> _$$FacturaLineaImplToJson(_$FacturaLineaImpl instance) =>
       'cantidad': instance.cantidad,
       'valor_unitario': instance.valorUnitario,
       'subtotal': instance.subtotal,
+      'factura_origen_id': instance.facturaOrigenId,
       'created_at': instance.createdAt?.toIso8601String(),
     };

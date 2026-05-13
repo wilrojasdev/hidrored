@@ -16,6 +16,12 @@ class NavItem {
 
 const navDestinations = <NavItem>[
   NavItem(
+    label: 'Pagos',
+    icon: Icons.payments_outlined,
+    selectedIcon: Icons.payments,
+    route: '/pagos',
+  ),
+  NavItem(
     label: 'Dashboard',
     icon: Icons.dashboard_outlined,
     selectedIcon: Icons.dashboard,
@@ -32,12 +38,6 @@ const navDestinations = <NavItem>[
     icon: Icons.receipt_long_outlined,
     selectedIcon: Icons.receipt_long,
     route: '/facturas',
-  ),
-  NavItem(
-    label: 'Pagos',
-    icon: Icons.payments_outlined,
-    selectedIcon: Icons.payments,
-    route: '/pagos',
   ),
   NavItem(
     label: 'Conceptos',

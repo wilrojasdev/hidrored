@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/utils/clock.dart';
+import '../../../core/utils/festivos_colombia.dart';
 import '../../../data/supabase_providers.dart';
 import '../../../domain/entities/factura.dart';
 import '../../../domain/entities/perfil.dart';
@@ -15,16 +16,18 @@ class Moroso {
     required this.cliente,
     required this.cantidadFacturas,
     required this.totalAdeudado,
-    required this.diasMaxVencido,
+    required this.diasHabilesMora,
   });
 
   final Cliente cliente;
   final int cantidadFacturas;
   final int totalAdeudado;
-  final int diasMaxVencido;
+  /// Días hábiles (CO) transcurridos después de la fecha de vencimiento.
+  final int diasHabilesMora;
 }
 
-/// Calcula la lista de morosos: clientes con saldo > 0.
+/// Calcula la lista de morosos: facturas pendientes con al menos un día hábil
+/// de mora tras el vencimiento (lun–vie, sin festivos).
 class MorososService {
   MorososService({required SupabaseClient client, required Perfil perfil})
     : _client = client,
@@ -68,14 +71,18 @@ class MorososService {
       final masVieja = pendientes
           .map((f) => f.fechaVencimiento)
           .reduce((a, b) => a.isBefore(b) ? a : b);
-      final dias = ahora.difference(masVieja).inDays;
+      final diasHab = FestivosColombia.diasHabilesTrasVencimiento(
+        masVieja,
+        ahora,
+      );
+      if (diasHab < 1) continue;
 
       morosos.add(
         Moroso(
           cliente: s,
           cantidadFacturas: pendientes.length,
           totalAdeudado: total,
-          diasMaxVencido: dias < 0 ? 0 : dias,
+          diasHabilesMora: diasHab,
         ),
       );
     }

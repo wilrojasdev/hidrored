@@ -277,13 +277,32 @@ class _ClienteTile extends StatelessWidget {
             ],
           ],
         ),
-        subtitle: Text(
-          isMobile
-              ? '$subtitle\n${formatPesos(cliente.tarifaMensual)} / mes'
-              : subtitle,
-          maxLines: isMobile ? 2 : 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+        subtitle: isMobile
+            ? Text.rich(
+                TextSpan(
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                  children: [
+                    TextSpan(text: subtitle),
+                    const TextSpan(text: '\n'),
+                    TextSpan(
+                      text: '${formatPesos(cliente.tarifaMensual)} / mes',
+                      style: AppListTypography.monto(
+                        theme,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                ),
+                maxLines: 4,
+                overflow: TextOverflow.ellipsis,
+              )
+            : Text(
+                subtitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
         isThreeLine: isMobile,
         trailing: isMobile
             ? const Icon(Icons.chevron_right)
@@ -297,7 +316,10 @@ class _ClienteTile extends StatelessWidget {
                   AppSpacing.gapMd,
                   Text(
                     formatPesos(cliente.tarifaMensual),
-                    style: const TextStyle(fontWeight: FontWeight.w600),
+                    style: AppListTypography.monto(
+                      theme,
+                      color: theme.colorScheme.primary,
+                    ),
                   ),
                   AppSpacing.gapSm,
                   const Icon(Icons.chevron_right),

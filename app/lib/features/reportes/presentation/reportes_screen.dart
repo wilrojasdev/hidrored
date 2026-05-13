@@ -39,8 +39,8 @@ class ReportesScreen extends StatelessWidget {
             const TabBar(
               isScrollable: true,
               tabs: [
-                Tab(icon: Icon(Icons.warning_amber_outlined), text: 'Morosos'),
-                Tab(icon: Icon(Icons.bar_chart), text: 'Ingresos'),
+                Tab(text: 'Morosos'),
+                Tab(text: 'Ingresos'),
               ],
             ),
             const Expanded(
@@ -70,28 +70,37 @@ class _MorososTab extends ConsumerWidget {
             return const AppEmptyState(
               icon: Icons.celebration_outlined,
               titulo: 'Sin morosos',
-              descripcion: '¡Felicitaciones! Todos tus clientes están al día.',
+              descripcion:
+                  'Nadie acumula días hábiles de mora tras el vencimiento, '
+                  'o todos están al día con sus facturas.',
             );
           }
           final totalAdeudado = lista.fold<int>(
             0,
             (s, m) => s + m.totalAdeudado,
           );
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(AppSpacing.lg),
+          return Card(
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.lg,
+                    AppSpacing.lg,
+                    AppSpacing.lg,
+                    AppSpacing.md,
+                  ),
                   child: Wrap(
                     spacing: AppSpacing.xxxl,
                     runSpacing: AppSpacing.lg,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       _Stat(
                         label: pluralES(
                           lista.length,
-                          'cliente moroso',
-                          'clientes morosos',
+                          'cliente en mora',
+                          'clientes en mora',
                         ),
                         value: '${lista.length}',
                       ),
@@ -103,23 +112,26 @@ class _MorososTab extends ConsumerWidget {
                     ],
                   ),
                 ),
-              ),
-              AppSpacing.gapMd,
-              Expanded(
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
+                const Divider(height: 1),
+                Expanded(
                   child: ListView.separated(
+                    padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
                     itemCount: lista.length,
                     separatorBuilder: (_, _) => const Divider(height: 1),
                     itemBuilder: (context, i) {
                       final m = lista[i];
                       final theme = Theme.of(context);
+                      final diasTxt = pluralES(
+                        m.diasHabilesMora,
+                        'día hábil en mora',
+                        'días hábiles en mora',
+                      );
                       return Semantics(
                         button: true,
                         label:
                             '${m.cliente.nombre}, debe ${formatPesos(m.totalAdeudado)} '
                             'en ${pluralES(m.cantidadFacturas, "factura", "facturas")}, '
-                            '${m.diasMaxVencido} días vencido',
+                            '$diasTxt',
                         child: ListTile(
                           leading: CircleAvatar(
                             backgroundColor: theme.colorScheme.errorContainer,
@@ -137,7 +149,7 @@ class _MorososTab extends ConsumerWidget {
                           ),
                           subtitle: Text(
                             '${pluralES(m.cantidadFacturas, "factura", "facturas")} · '
-                            '${m.diasMaxVencido} días vencido',
+                            '$diasTxt',
                           ),
                           trailing: Text(
                             formatPesos(m.totalAdeudado),
@@ -153,8 +165,8 @@ class _MorososTab extends ConsumerWidget {
                     },
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),

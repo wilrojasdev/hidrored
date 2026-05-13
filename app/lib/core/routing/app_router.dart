@@ -30,14 +30,14 @@ final _shellNavKey = GlobalKey<NavigatorState>();
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     navigatorKey: _rootNavKey,
-    initialLocation: '/',
+    initialLocation: '/pagos',
     debugLogDiagnostics: true,
     refreshListenable: _AuthRefreshListenable(ref),
     redirect: (context, state) {
       final isAuth = ref.read(isAuthenticatedProvider);
       final loggingIn = state.matchedLocation == '/login';
       if (!isAuth && !loggingIn) return '/login';
-      if (isAuth && loggingIn) return '/';
+      if (isAuth && loggingIn) return '/pagos';
       return null;
     },
     routes: [

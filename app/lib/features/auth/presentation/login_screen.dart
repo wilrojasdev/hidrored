@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/app_info.dart';
 import '../../../core/config/env.dart';
 import '../../../core/logging/app_logger.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -300,30 +301,8 @@ class _Brand extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          width: 72,
-          height: 72,
-          decoration: BoxDecoration(
-            gradient: AppGradients.header(context),
-            borderRadius: BorderRadius.circular(AppSizes.radiusLg),
-            boxShadow: [
-              BoxShadow(
-                color: theme.colorScheme.primary.withValues(alpha: 0.25),
-                blurRadius: 16,
-                offset: const Offset(0, 6),
-              ),
-            ],
-          ),
-          alignment: Alignment.center,
-          child: Icon(
-            Icons.water_drop,
-            size: 36,
-            color: theme.colorScheme.onPrimary,
-          ),
-        ),
-        AppSpacing.gapLg,
         Text(
-          'Hidrored',
+          kAppDisplayName,
           style: theme.textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.w800,
             letterSpacing: -0.4,
@@ -334,6 +313,14 @@ class _Brand extends StatelessWidget {
         Text(
           'Gestión de acueductos veredales',
           style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        AppSpacing.gapMd,
+        Text(
+          kAppVersionLabel,
+          style: theme.textTheme.labelMedium?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
           textAlign: TextAlign.center,

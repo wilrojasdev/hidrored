@@ -22,15 +22,15 @@ _$EventoServicioImpl _$$EventoServicioImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$EventoServicioImplToJson(
-  _$EventoServicioImpl instance,
-) => <String, dynamic>{
-  'id': instance.id,
-  'tenant_id': instance.tenantId,
-  'cliente_id': instance.clienteId,
-  'fecha': instance.fecha.toIso8601String(),
-  'tipo': _tipoToJson(instance.tipo),
-  'estado_resultante': instance.estadoResultante,
-  'motivo': instance.motivo,
-  'costo': instance.costo,
-  'created_at': instance.createdAt?.toIso8601String(),
-};
+        _$EventoServicioImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'tenant_id': instance.tenantId,
+      'cliente_id': instance.clienteId,
+      'fecha': instance.fecha.toIso8601String(),
+      'tipo': _tipoToJson(instance.tipo),
+      'estado_resultante': instance.estadoResultante,
+      'motivo': instance.motivo,
+      'costo': instance.costo,
+      'created_at': instance.createdAt?.toIso8601String(),
+    };

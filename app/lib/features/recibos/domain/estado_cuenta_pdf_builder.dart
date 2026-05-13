@@ -364,5 +364,6 @@ class EstadoCuentaPdfBuilder {
     EstadoFactura.pendiente => PdfColors.orange700,
     EstadoFactura.pagada => PdfColors.green700,
     EstadoFactura.anulada => PdfColors.grey600,
+    EstadoFactura.refacturada => PdfColors.blue700,
   };
 }

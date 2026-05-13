@@ -25,6 +25,7 @@ _$FacturaImpl _$$FacturaImplFromJson(Map<String, dynamic> json) =>
           ? EstadoFactura.pendiente
           : _estadoFromJson(json['estado'] as String),
       motivoAnulacion: json['motivo_anulacion'] as String?,
+      refacturadaEnId: json['refacturada_en_id'] as String?,
       createdAt: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
@@ -48,6 +49,7 @@ Map<String, dynamic> _$$FacturaImplToJson(_$FacturaImpl instance) =>
       'total': instance.total,
       'estado': _estadoToJson(instance.estado),
       'motivo_anulacion': instance.motivoAnulacion,
+      'refacturada_en_id': instance.refacturadaEnId,
       'created_at': instance.createdAt?.toIso8601String(),
       'updated_at': instance.updatedAt?.toIso8601String(),
     };

@@ -67,16 +67,31 @@ class _GenerarFacturacionScreenState
 
   Future<void> _ejecutar() async {
     final cantidad = _preview!.where((p) => p.tieneCargos).length;
-    final total = _preview!.fold<int>(0, (s, p) => s + p.totalFacturaNueva);
+    final total = _preview!.fold<int>(0, (s, p) => s + p.totalRecibo);
+    final conRefacturadas =
+        _preview!.where((p) => p.cantidadRefacturadas > 0).length;
+    final mensaje = StringBuffer(
+      'Se emitirán ${pluralES(cantidad, "factura", "facturas")} '
+      'para ${formatPeriodo(_periodo)}.\n\n'
+      'Total facturado: ${formatPesos(total)}\n\n',
+    );
+    if (conRefacturadas > 0) {
+      mensaje.write(
+        '$conRefacturadas '
+        '${pluralES(conRefacturadas, "cliente tendrá saldos anteriores absorbidos en su nueva factura.", "clientes tendrán saldos anteriores absorbidos en sus nuevas facturas.")}'
+        '\n\n',
+      );
+    }
+    mensaje.write(
+      'Esta acción genera los recibos del mes. Si necesitas corregir '
+      'algo después, puedes anular y los saldos refacturados volverán a '
+      'estar pendientes.',
+    );
+
     final ok = await confirm(
       context,
       titulo: 'Confirmar facturación',
-      mensaje:
-          'Se emitirán ${pluralES(cantidad, "factura", "facturas")} '
-          'para ${formatPeriodo(_periodo)}.\n\n'
-          'Total facturado: ${formatPesos(total)}\n\n'
-          'Esta acción genera los recibos del mes. Si necesitas corregir '
-          'algo después, puedes anular facturas individualmente.',
+      mensaje: mensaje.toString(),
       confirmar: 'Emitir',
       icono: Icons.playlist_add_check,
     );
@@ -393,7 +408,7 @@ class _PreviewTableState extends State<_PreviewTable> {
                   DataColumn(label: Text('Mora'), numeric: true),
                   DataColumn(label: Text('Reconexión'), numeric: true),
                   DataColumn(label: Text('Extras'), numeric: true),
-                  DataColumn(label: Text('Atrasos'), numeric: true),
+                  DataColumn(label: Text('Refacturado'), numeric: true),
                   DataColumn(label: Text('Recibo'), numeric: true),
                 ],
                 rows: [
@@ -447,9 +462,9 @@ class _PreviewTableState extends State<_PreviewTable> {
                         ),
                         DataCell(
                           Text(
-                            p.cantidadAtrasos == 0
+                            p.cantidadRefacturadas == 0
                                 ? '-'
-                                : '${p.cantidadAtrasos}× ${formatPesos(p.totalAtrasos)}',
+                                : '${p.cantidadRefacturadas}× ${formatPesos(p.totalRefacturado)}',
                           ),
                         ),
                         DataCell(
@@ -488,11 +503,12 @@ class _Footer extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final paraEmitir = preview.where((p) => p.tieneCargos).length;
-    final totalNuevoFacturado = preview.fold<int>(
+    final totalRefacturado = preview.fold<int>(
       0,
-      (s, p) => s + p.totalFacturaNueva,
+      (s, p) => s + p.totalRefacturado,
     );
     final totalRecibos = preview.fold<int>(0, (s, p) => s + p.totalRecibo);
+    final totalNuevo = totalRecibos - totalRefacturado;
 
     return Card(
       child: Padding(
@@ -502,13 +518,19 @@ class _Footer extends StatelessWidget {
             _FooterStat(label: 'Recibos a emitir', value: '$paraEmitir'),
             const SizedBox(width: 32),
             _FooterStat(
-              label: 'Nuevo facturado',
-              value: formatPesos(totalNuevoFacturado),
-              hint: 'Mensualidades + mora + reconexiones',
+              label: 'Cargos del mes',
+              value: formatPesos(totalNuevo),
+              hint: 'Mensualidades + mora + reconexiones + extras',
             ),
             const SizedBox(width: 32),
             _FooterStat(
-              label: 'Total a cobrar (con atrasos)',
+              label: 'Refacturado',
+              value: formatPesos(totalRefacturado),
+              hint: 'Saldos absorbidos de meses anteriores',
+            ),
+            const SizedBox(width: 32),
+            _FooterStat(
+              label: 'Total a cobrar',
               value: formatPesos(totalRecibos),
               valueStyle: TextStyle(
                 fontSize: 20,

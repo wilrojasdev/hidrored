@@ -16,7 +16,7 @@ Future<void> bootstrap() async {
     );
   } else if (kDebugMode) {
     debugPrint(
-      '[hidrored] Supabase no configurado. '
+      '[HidroRed] Supabase no configurado. '
       'Pasa --dart-define=SUPABASE_URL=... y SUPABASE_ANON_KEY=... '
       'al ejecutar para habilitar el backend.',
     );
