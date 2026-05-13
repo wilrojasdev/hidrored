@@ -12,7 +12,8 @@ part of 'pago.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 Pago _$PagoFromJson(Map<String, dynamic> json) {
   return _Pago.fromJson(json);
@@ -44,17 +45,18 @@ abstract class $PagoCopyWith<$Res> {
   factory $PagoCopyWith(Pago value, $Res Function(Pago) then) =
       _$PagoCopyWithImpl<$Res, Pago>;
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'tenant_id') String tenantId,
-      @JsonKey(name: 'cliente_id') String clienteId,
-      DateTime fecha,
-      int valor,
-      @JsonKey(fromJson: _metodoFromJson, toJson: _metodoToJson)
-      MetodoPago metodo,
-      String? referencia,
-      String? notas,
-      @JsonKey(name: 'created_at') DateTime? createdAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'tenant_id') String tenantId,
+    @JsonKey(name: 'cliente_id') String clienteId,
+    DateTime fecha,
+    int valor,
+    @JsonKey(fromJson: _metodoFromJson, toJson: _metodoToJson)
+    MetodoPago metodo,
+    String? referencia,
+    String? notas,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+  });
 }
 
 /// @nodoc
@@ -80,65 +82,70 @@ class _$PagoCopyWithImpl<$Res, $Val extends Pago>
     Object? notas = freezed,
     Object? createdAt = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      tenantId: null == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String,
-      clienteId: null == clienteId
-          ? _value.clienteId
-          : clienteId // ignore: cast_nullable_to_non_nullable
-              as String,
-      fecha: null == fecha
-          ? _value.fecha
-          : fecha // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      valor: null == valor
-          ? _value.valor
-          : valor // ignore: cast_nullable_to_non_nullable
-              as int,
-      metodo: null == metodo
-          ? _value.metodo
-          : metodo // ignore: cast_nullable_to_non_nullable
-              as MetodoPago,
-      referencia: freezed == referencia
-          ? _value.referencia
-          : referencia // ignore: cast_nullable_to_non_nullable
-              as String?,
-      notas: freezed == notas
-          ? _value.notas
-          : notas // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            tenantId: null == tenantId
+                ? _value.tenantId
+                : tenantId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            clienteId: null == clienteId
+                ? _value.clienteId
+                : clienteId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            fecha: null == fecha
+                ? _value.fecha
+                : fecha // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            valor: null == valor
+                ? _value.valor
+                : valor // ignore: cast_nullable_to_non_nullable
+                      as int,
+            metodo: null == metodo
+                ? _value.metodo
+                : metodo // ignore: cast_nullable_to_non_nullable
+                      as MetodoPago,
+            referencia: freezed == referencia
+                ? _value.referencia
+                : referencia // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            notas: freezed == notas
+                ? _value.notas
+                : notas // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            createdAt: freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$PagoImplCopyWith<$Res> implements $PagoCopyWith<$Res> {
   factory _$$PagoImplCopyWith(
-          _$PagoImpl value, $Res Function(_$PagoImpl) then) =
-      __$$PagoImplCopyWithImpl<$Res>;
+    _$PagoImpl value,
+    $Res Function(_$PagoImpl) then,
+  ) = __$$PagoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'tenant_id') String tenantId,
-      @JsonKey(name: 'cliente_id') String clienteId,
-      DateTime fecha,
-      int valor,
-      @JsonKey(fromJson: _metodoFromJson, toJson: _metodoToJson)
-      MetodoPago metodo,
-      String? referencia,
-      String? notas,
-      @JsonKey(name: 'created_at') DateTime? createdAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'tenant_id') String tenantId,
+    @JsonKey(name: 'cliente_id') String clienteId,
+    DateTime fecha,
+    int valor,
+    @JsonKey(fromJson: _metodoFromJson, toJson: _metodoToJson)
+    MetodoPago metodo,
+    String? referencia,
+    String? notas,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+  });
 }
 
 /// @nodoc
@@ -146,7 +153,7 @@ class __$$PagoImplCopyWithImpl<$Res>
     extends _$PagoCopyWithImpl<$Res, _$PagoImpl>
     implements _$$PagoImplCopyWith<$Res> {
   __$$PagoImplCopyWithImpl(_$PagoImpl _value, $Res Function(_$PagoImpl) _then)
-      : super(_value, _then);
+    : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -161,61 +168,64 @@ class __$$PagoImplCopyWithImpl<$Res>
     Object? notas = freezed,
     Object? createdAt = freezed,
   }) {
-    return _then(_$PagoImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      tenantId: null == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String,
-      clienteId: null == clienteId
-          ? _value.clienteId
-          : clienteId // ignore: cast_nullable_to_non_nullable
-              as String,
-      fecha: null == fecha
-          ? _value.fecha
-          : fecha // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      valor: null == valor
-          ? _value.valor
-          : valor // ignore: cast_nullable_to_non_nullable
-              as int,
-      metodo: null == metodo
-          ? _value.metodo
-          : metodo // ignore: cast_nullable_to_non_nullable
-              as MetodoPago,
-      referencia: freezed == referencia
-          ? _value.referencia
-          : referencia // ignore: cast_nullable_to_non_nullable
-              as String?,
-      notas: freezed == notas
-          ? _value.notas
-          : notas // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ));
+    return _then(
+      _$PagoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        tenantId: null == tenantId
+            ? _value.tenantId
+            : tenantId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        clienteId: null == clienteId
+            ? _value.clienteId
+            : clienteId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        fecha: null == fecha
+            ? _value.fecha
+            : fecha // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        valor: null == valor
+            ? _value.valor
+            : valor // ignore: cast_nullable_to_non_nullable
+                  as int,
+        metodo: null == metodo
+            ? _value.metodo
+            : metodo // ignore: cast_nullable_to_non_nullable
+                  as MetodoPago,
+        referencia: freezed == referencia
+            ? _value.referencia
+            : referencia // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        notas: freezed == notas
+            ? _value.notas
+            : notas // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        createdAt: freezed == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$PagoImpl implements _Pago {
-  const _$PagoImpl(
-      {required this.id,
-      @JsonKey(name: 'tenant_id') required this.tenantId,
-      @JsonKey(name: 'cliente_id') required this.clienteId,
-      required this.fecha,
-      required this.valor,
-      @JsonKey(fromJson: _metodoFromJson, toJson: _metodoToJson)
-      required this.metodo,
-      this.referencia,
-      this.notas,
-      @JsonKey(name: 'created_at') this.createdAt});
+  const _$PagoImpl({
+    required this.id,
+    @JsonKey(name: 'tenant_id') required this.tenantId,
+    @JsonKey(name: 'cliente_id') required this.clienteId,
+    required this.fecha,
+    required this.valor,
+    @JsonKey(fromJson: _metodoFromJson, toJson: _metodoToJson)
+    required this.metodo,
+    this.referencia,
+    this.notas,
+    @JsonKey(name: 'created_at') this.createdAt,
+  });
 
   factory _$PagoImpl.fromJson(Map<String, dynamic> json) =>
       _$$PagoImplFromJson(json);
@@ -270,8 +280,18 @@ class _$PagoImpl implements _Pago {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, tenantId, clienteId, fecha,
-      valor, metodo, referencia, notas, createdAt);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    tenantId,
+    clienteId,
+    fecha,
+    valor,
+    metodo,
+    referencia,
+    notas,
+    createdAt,
+  );
 
   @JsonKey(ignore: true)
   @override
@@ -281,24 +301,23 @@ class _$PagoImpl implements _Pago {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PagoImplToJson(
-      this,
-    );
+    return _$$PagoImplToJson(this);
   }
 }
 
 abstract class _Pago implements Pago {
-  const factory _Pago(
-      {required final String id,
-      @JsonKey(name: 'tenant_id') required final String tenantId,
-      @JsonKey(name: 'cliente_id') required final String clienteId,
-      required final DateTime fecha,
-      required final int valor,
-      @JsonKey(fromJson: _metodoFromJson, toJson: _metodoToJson)
-      required final MetodoPago metodo,
-      final String? referencia,
-      final String? notas,
-      @JsonKey(name: 'created_at') final DateTime? createdAt}) = _$PagoImpl;
+  const factory _Pago({
+    required final String id,
+    @JsonKey(name: 'tenant_id') required final String tenantId,
+    @JsonKey(name: 'cliente_id') required final String clienteId,
+    required final DateTime fecha,
+    required final int valor,
+    @JsonKey(fromJson: _metodoFromJson, toJson: _metodoToJson)
+    required final MetodoPago metodo,
+    final String? referencia,
+    final String? notas,
+    @JsonKey(name: 'created_at') final DateTime? createdAt,
+  }) = _$PagoImpl;
 
   factory _Pago.fromJson(Map<String, dynamic> json) = _$PagoImpl.fromJson;
 

@@ -58,9 +58,7 @@ class ConfiguracionScreen extends ConsumerWidget {
                         maxWidth: constraints.maxWidth,
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: AppSpacing.xxl,
-                        ),
+                        padding: const EdgeInsets.only(bottom: AppSpacing.xxl),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [

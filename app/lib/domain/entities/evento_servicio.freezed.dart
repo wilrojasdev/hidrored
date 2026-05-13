@@ -12,7 +12,8 @@ part of 'evento_servicio.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 EventoServicio _$EventoServicioFromJson(Map<String, dynamic> json) {
   return _EventoServicio.fromJson(json);
@@ -44,20 +45,22 @@ mixin _$EventoServicio {
 /// @nodoc
 abstract class $EventoServicioCopyWith<$Res> {
   factory $EventoServicioCopyWith(
-          EventoServicio value, $Res Function(EventoServicio) then) =
-      _$EventoServicioCopyWithImpl<$Res, EventoServicio>;
+    EventoServicio value,
+    $Res Function(EventoServicio) then,
+  ) = _$EventoServicioCopyWithImpl<$Res, EventoServicio>;
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'tenant_id') String tenantId,
-      @JsonKey(name: 'cliente_id') String clienteId,
-      DateTime fecha,
-      @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson)
-      TipoEventoServicio tipo,
-      @JsonKey(name: 'estado_resultante') String? estadoResultante,
-      String? motivo,
-      int? costo,
-      @JsonKey(name: 'created_at') DateTime? createdAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'tenant_id') String tenantId,
+    @JsonKey(name: 'cliente_id') String clienteId,
+    DateTime fecha,
+    @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson)
+    TipoEventoServicio tipo,
+    @JsonKey(name: 'estado_resultante') String? estadoResultante,
+    String? motivo,
+    int? costo,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+  });
 }
 
 /// @nodoc
@@ -83,66 +86,71 @@ class _$EventoServicioCopyWithImpl<$Res, $Val extends EventoServicio>
     Object? costo = freezed,
     Object? createdAt = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      tenantId: null == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String,
-      clienteId: null == clienteId
-          ? _value.clienteId
-          : clienteId // ignore: cast_nullable_to_non_nullable
-              as String,
-      fecha: null == fecha
-          ? _value.fecha
-          : fecha // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      tipo: null == tipo
-          ? _value.tipo
-          : tipo // ignore: cast_nullable_to_non_nullable
-              as TipoEventoServicio,
-      estadoResultante: freezed == estadoResultante
-          ? _value.estadoResultante
-          : estadoResultante // ignore: cast_nullable_to_non_nullable
-              as String?,
-      motivo: freezed == motivo
-          ? _value.motivo
-          : motivo // ignore: cast_nullable_to_non_nullable
-              as String?,
-      costo: freezed == costo
-          ? _value.costo
-          : costo // ignore: cast_nullable_to_non_nullable
-              as int?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            tenantId: null == tenantId
+                ? _value.tenantId
+                : tenantId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            clienteId: null == clienteId
+                ? _value.clienteId
+                : clienteId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            fecha: null == fecha
+                ? _value.fecha
+                : fecha // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            tipo: null == tipo
+                ? _value.tipo
+                : tipo // ignore: cast_nullable_to_non_nullable
+                      as TipoEventoServicio,
+            estadoResultante: freezed == estadoResultante
+                ? _value.estadoResultante
+                : estadoResultante // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            motivo: freezed == motivo
+                ? _value.motivo
+                : motivo // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            costo: freezed == costo
+                ? _value.costo
+                : costo // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            createdAt: freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$EventoServicioImplCopyWith<$Res>
     implements $EventoServicioCopyWith<$Res> {
-  factory _$$EventoServicioImplCopyWith(_$EventoServicioImpl value,
-          $Res Function(_$EventoServicioImpl) then) =
-      __$$EventoServicioImplCopyWithImpl<$Res>;
+  factory _$$EventoServicioImplCopyWith(
+    _$EventoServicioImpl value,
+    $Res Function(_$EventoServicioImpl) then,
+  ) = __$$EventoServicioImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'tenant_id') String tenantId,
-      @JsonKey(name: 'cliente_id') String clienteId,
-      DateTime fecha,
-      @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson)
-      TipoEventoServicio tipo,
-      @JsonKey(name: 'estado_resultante') String? estadoResultante,
-      String? motivo,
-      int? costo,
-      @JsonKey(name: 'created_at') DateTime? createdAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'tenant_id') String tenantId,
+    @JsonKey(name: 'cliente_id') String clienteId,
+    DateTime fecha,
+    @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson)
+    TipoEventoServicio tipo,
+    @JsonKey(name: 'estado_resultante') String? estadoResultante,
+    String? motivo,
+    int? costo,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+  });
 }
 
 /// @nodoc
@@ -150,8 +158,9 @@ class __$$EventoServicioImplCopyWithImpl<$Res>
     extends _$EventoServicioCopyWithImpl<$Res, _$EventoServicioImpl>
     implements _$$EventoServicioImplCopyWith<$Res> {
   __$$EventoServicioImplCopyWithImpl(
-      _$EventoServicioImpl _value, $Res Function(_$EventoServicioImpl) _then)
-      : super(_value, _then);
+    _$EventoServicioImpl _value,
+    $Res Function(_$EventoServicioImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -166,60 +175,63 @@ class __$$EventoServicioImplCopyWithImpl<$Res>
     Object? costo = freezed,
     Object? createdAt = freezed,
   }) {
-    return _then(_$EventoServicioImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      tenantId: null == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String,
-      clienteId: null == clienteId
-          ? _value.clienteId
-          : clienteId // ignore: cast_nullable_to_non_nullable
-              as String,
-      fecha: null == fecha
-          ? _value.fecha
-          : fecha // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      tipo: null == tipo
-          ? _value.tipo
-          : tipo // ignore: cast_nullable_to_non_nullable
-              as TipoEventoServicio,
-      estadoResultante: freezed == estadoResultante
-          ? _value.estadoResultante
-          : estadoResultante // ignore: cast_nullable_to_non_nullable
-              as String?,
-      motivo: freezed == motivo
-          ? _value.motivo
-          : motivo // ignore: cast_nullable_to_non_nullable
-              as String?,
-      costo: freezed == costo
-          ? _value.costo
-          : costo // ignore: cast_nullable_to_non_nullable
-              as int?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ));
+    return _then(
+      _$EventoServicioImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        tenantId: null == tenantId
+            ? _value.tenantId
+            : tenantId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        clienteId: null == clienteId
+            ? _value.clienteId
+            : clienteId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        fecha: null == fecha
+            ? _value.fecha
+            : fecha // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        tipo: null == tipo
+            ? _value.tipo
+            : tipo // ignore: cast_nullable_to_non_nullable
+                  as TipoEventoServicio,
+        estadoResultante: freezed == estadoResultante
+            ? _value.estadoResultante
+            : estadoResultante // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        motivo: freezed == motivo
+            ? _value.motivo
+            : motivo // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        costo: freezed == costo
+            ? _value.costo
+            : costo // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        createdAt: freezed == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$EventoServicioImpl implements _EventoServicio {
-  const _$EventoServicioImpl(
-      {required this.id,
-      @JsonKey(name: 'tenant_id') required this.tenantId,
-      @JsonKey(name: 'cliente_id') required this.clienteId,
-      required this.fecha,
-      @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson) required this.tipo,
-      @JsonKey(name: 'estado_resultante') this.estadoResultante,
-      this.motivo,
-      this.costo,
-      @JsonKey(name: 'created_at') this.createdAt});
+  const _$EventoServicioImpl({
+    required this.id,
+    @JsonKey(name: 'tenant_id') required this.tenantId,
+    @JsonKey(name: 'cliente_id') required this.clienteId,
+    required this.fecha,
+    @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson) required this.tipo,
+    @JsonKey(name: 'estado_resultante') this.estadoResultante,
+    this.motivo,
+    this.costo,
+    @JsonKey(name: 'created_at') this.createdAt,
+  });
 
   factory _$EventoServicioImpl.fromJson(Map<String, dynamic> json) =>
       _$$EventoServicioImplFromJson(json);
@@ -275,37 +287,47 @@ class _$EventoServicioImpl implements _EventoServicio {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, tenantId, clienteId, fecha,
-      tipo, estadoResultante, motivo, costo, createdAt);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    tenantId,
+    clienteId,
+    fecha,
+    tipo,
+    estadoResultante,
+    motivo,
+    costo,
+    createdAt,
+  );
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$EventoServicioImplCopyWith<_$EventoServicioImpl> get copyWith =>
       __$$EventoServicioImplCopyWithImpl<_$EventoServicioImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$EventoServicioImplToJson(
-      this,
-    );
+    return _$$EventoServicioImplToJson(this);
   }
 }
 
 abstract class _EventoServicio implements EventoServicio {
-  const factory _EventoServicio(
-          {required final String id,
-          @JsonKey(name: 'tenant_id') required final String tenantId,
-          @JsonKey(name: 'cliente_id') required final String clienteId,
-          required final DateTime fecha,
-          @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson)
-          required final TipoEventoServicio tipo,
-          @JsonKey(name: 'estado_resultante') final String? estadoResultante,
-          final String? motivo,
-          final int? costo,
-          @JsonKey(name: 'created_at') final DateTime? createdAt}) =
-      _$EventoServicioImpl;
+  const factory _EventoServicio({
+    required final String id,
+    @JsonKey(name: 'tenant_id') required final String tenantId,
+    @JsonKey(name: 'cliente_id') required final String clienteId,
+    required final DateTime fecha,
+    @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson)
+    required final TipoEventoServicio tipo,
+    @JsonKey(name: 'estado_resultante') final String? estadoResultante,
+    final String? motivo,
+    final int? costo,
+    @JsonKey(name: 'created_at') final DateTime? createdAt,
+  }) = _$EventoServicioImpl;
 
   factory _EventoServicio.fromJson(Map<String, dynamic> json) =
       _$EventoServicioImpl.fromJson;

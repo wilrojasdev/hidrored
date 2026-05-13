@@ -25,8 +25,9 @@ class ReciboPdfBuilder {
   static Future<Uint8List?> _logoPorDefecto() {
     _logoFuture ??= () async {
       try {
-        final data =
-            await rootBundle.load('assets/images/tenant_default_logo.png');
+        final data = await rootBundle.load(
+          'assets/images/tenant_default_logo.png',
+        );
         return data.buffer.asUint8List();
       } catch (_) {
         return null;
@@ -150,6 +151,7 @@ class ReciboPdfBuilder {
     ReciboData d, {
     required double escala,
     required Uint8List? logoBytes,
+
     /// En cuadrícula 2×2 el [pw.Spacer] dentro de columnas anidadas puede
     /// dejar sin espacio visible al bloque de medios de pago; aquí se evita.
     bool compactoLote = false,
@@ -168,8 +170,14 @@ class ReciboPdfBuilder {
       fontWeight: pw.FontWeight.bold,
       color: _brandDark,
     );
-    final fontTexto = pw.TextStyle(fontSize: 9 * escala, color: PdfColors.grey800);
-    final fontPequeno = pw.TextStyle(fontSize: 8 * escala, color: PdfColors.grey700);
+    final fontTexto = pw.TextStyle(
+      fontSize: 9 * escala,
+      color: PdfColors.grey800,
+    );
+    final fontPequeno = pw.TextStyle(
+      fontSize: 8 * escala,
+      color: PdfColors.grey700,
+    );
 
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.stretch,
@@ -325,9 +333,7 @@ class ReciboPdfBuilder {
     return pw.Container(
       padding: pw.EdgeInsets.only(bottom: 8 * escala),
       decoration: pw.BoxDecoration(
-        border: pw.Border(
-          bottom: pw.BorderSide(color: _brand, width: 2),
-        ),
+        border: pw.Border(bottom: pw.BorderSide(color: _brand, width: 2)),
       ),
       child: pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -346,8 +352,7 @@ class ReciboPdfBuilder {
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 pw.Text(t.nombre.toUpperCase(), style: fontTitulo),
-                if (t.nit != null)
-                  pw.Text('NIT ${t.nit}', style: fontPequeno),
+                if (t.nit != null) pw.Text('NIT ${t.nit}', style: fontPequeno),
                 pw.SizedBox(height: 2 * escala),
                 pw.Text(
                   'Periodo: ${formatPeriodo(f.periodo)} · Vence: ${formatFecha(f.fechaVencimiento)}',
@@ -542,8 +547,10 @@ class ReciboPdfBuilder {
       );
     }
 
-    final tieneBanco = t.cuentaBancolombia != null && t.cuentaBancolombia!.trim().isNotEmpty;
-    final tieneNequi = t.cuentaNequi != null && t.cuentaNequi!.trim().isNotEmpty;
+    final tieneBanco =
+        t.cuentaBancolombia != null && t.cuentaBancolombia!.trim().isNotEmpty;
+    final tieneNequi =
+        t.cuentaNequi != null && t.cuentaNequi!.trim().isNotEmpty;
 
     final tituloMedios = pw.TextStyle(
       fontSize: (fontSubtitulo.fontSize ?? 10) + 2 * escala,
@@ -565,9 +572,7 @@ class ReciboPdfBuilder {
             topRight: pw.Radius.circular(5),
           ),
         ),
-        child: pw.Center(
-          child: pw.Text('MEDIOS DE PAGO', style: tituloMedios),
-        ),
+        child: pw.Center(child: pw.Text('MEDIOS DE PAGO', style: tituloMedios)),
       ),
     ];
 
@@ -597,7 +602,9 @@ class ReciboPdfBuilder {
         );
       }
       if (tieneBanco && tieneNequi) {
-        hijos.add(pw.Divider(color: PdfColors.grey400, height: 1, thickness: 0.5));
+        hijos.add(
+          pw.Divider(color: PdfColors.grey400, height: 1, thickness: 0.5),
+        );
       }
       if (tieneNequi) {
         hijos.add(
@@ -684,11 +691,7 @@ class ReciboPdfBuilder {
       child: pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
-          pw.Container(
-            width: 4,
-            height: 52 * escala,
-            color: acento,
-          ),
+          pw.Container(width: 4, height: 52 * escala, color: acento),
           pw.SizedBox(width: 10 * escala),
           pw.Expanded(
             child: pw.Column(
@@ -718,9 +721,7 @@ class ReciboPdfBuilder {
                   child: pw.Row(
                     children: [
                       pw.Text('Nº / celular:  ', style: fontPequeno),
-                      pw.Expanded(
-                        child: pw.Text(cuenta, style: fontCuenta),
-                      ),
+                      pw.Expanded(child: pw.Text(cuenta, style: fontCuenta)),
                     ],
                   ),
                 ),

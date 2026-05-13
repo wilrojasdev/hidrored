@@ -12,7 +12,8 @@ part of 'factura_linea.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 FacturaLinea _$FacturaLineaFromJson(Map<String, dynamic> json) {
   return _FacturaLinea.fromJson(json);
@@ -46,20 +47,22 @@ mixin _$FacturaLinea {
 /// @nodoc
 abstract class $FacturaLineaCopyWith<$Res> {
   factory $FacturaLineaCopyWith(
-          FacturaLinea value, $Res Function(FacturaLinea) then) =
-      _$FacturaLineaCopyWithImpl<$Res, FacturaLinea>;
+    FacturaLinea value,
+    $Res Function(FacturaLinea) then,
+  ) = _$FacturaLineaCopyWithImpl<$Res, FacturaLinea>;
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'tenant_id') String tenantId,
-      @JsonKey(name: 'factura_id') String facturaId,
-      @JsonKey(name: 'concepto_id') String? conceptoId,
-      String descripcion,
-      int cantidad,
-      @JsonKey(name: 'valor_unitario') int valorUnitario,
-      int subtotal,
-      @JsonKey(name: 'factura_origen_id') String? facturaOrigenId,
-      @JsonKey(name: 'created_at') DateTime? createdAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'tenant_id') String tenantId,
+    @JsonKey(name: 'factura_id') String facturaId,
+    @JsonKey(name: 'concepto_id') String? conceptoId,
+    String descripcion,
+    int cantidad,
+    @JsonKey(name: 'valor_unitario') int valorUnitario,
+    int subtotal,
+    @JsonKey(name: 'factura_origen_id') String? facturaOrigenId,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+  });
 }
 
 /// @nodoc
@@ -86,48 +89,51 @@ class _$FacturaLineaCopyWithImpl<$Res, $Val extends FacturaLinea>
     Object? facturaOrigenId = freezed,
     Object? createdAt = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      tenantId: null == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String,
-      facturaId: null == facturaId
-          ? _value.facturaId
-          : facturaId // ignore: cast_nullable_to_non_nullable
-              as String,
-      conceptoId: freezed == conceptoId
-          ? _value.conceptoId
-          : conceptoId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      descripcion: null == descripcion
-          ? _value.descripcion
-          : descripcion // ignore: cast_nullable_to_non_nullable
-              as String,
-      cantidad: null == cantidad
-          ? _value.cantidad
-          : cantidad // ignore: cast_nullable_to_non_nullable
-              as int,
-      valorUnitario: null == valorUnitario
-          ? _value.valorUnitario
-          : valorUnitario // ignore: cast_nullable_to_non_nullable
-              as int,
-      subtotal: null == subtotal
-          ? _value.subtotal
-          : subtotal // ignore: cast_nullable_to_non_nullable
-              as int,
-      facturaOrigenId: freezed == facturaOrigenId
-          ? _value.facturaOrigenId
-          : facturaOrigenId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            tenantId: null == tenantId
+                ? _value.tenantId
+                : tenantId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            facturaId: null == facturaId
+                ? _value.facturaId
+                : facturaId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            conceptoId: freezed == conceptoId
+                ? _value.conceptoId
+                : conceptoId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            descripcion: null == descripcion
+                ? _value.descripcion
+                : descripcion // ignore: cast_nullable_to_non_nullable
+                      as String,
+            cantidad: null == cantidad
+                ? _value.cantidad
+                : cantidad // ignore: cast_nullable_to_non_nullable
+                      as int,
+            valorUnitario: null == valorUnitario
+                ? _value.valorUnitario
+                : valorUnitario // ignore: cast_nullable_to_non_nullable
+                      as int,
+            subtotal: null == subtotal
+                ? _value.subtotal
+                : subtotal // ignore: cast_nullable_to_non_nullable
+                      as int,
+            facturaOrigenId: freezed == facturaOrigenId
+                ? _value.facturaOrigenId
+                : facturaOrigenId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            createdAt: freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -135,21 +141,23 @@ class _$FacturaLineaCopyWithImpl<$Res, $Val extends FacturaLinea>
 abstract class _$$FacturaLineaImplCopyWith<$Res>
     implements $FacturaLineaCopyWith<$Res> {
   factory _$$FacturaLineaImplCopyWith(
-          _$FacturaLineaImpl value, $Res Function(_$FacturaLineaImpl) then) =
-      __$$FacturaLineaImplCopyWithImpl<$Res>;
+    _$FacturaLineaImpl value,
+    $Res Function(_$FacturaLineaImpl) then,
+  ) = __$$FacturaLineaImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'tenant_id') String tenantId,
-      @JsonKey(name: 'factura_id') String facturaId,
-      @JsonKey(name: 'concepto_id') String? conceptoId,
-      String descripcion,
-      int cantidad,
-      @JsonKey(name: 'valor_unitario') int valorUnitario,
-      int subtotal,
-      @JsonKey(name: 'factura_origen_id') String? facturaOrigenId,
-      @JsonKey(name: 'created_at') DateTime? createdAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'tenant_id') String tenantId,
+    @JsonKey(name: 'factura_id') String facturaId,
+    @JsonKey(name: 'concepto_id') String? conceptoId,
+    String descripcion,
+    int cantidad,
+    @JsonKey(name: 'valor_unitario') int valorUnitario,
+    int subtotal,
+    @JsonKey(name: 'factura_origen_id') String? facturaOrigenId,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+  });
 }
 
 /// @nodoc
@@ -157,8 +165,9 @@ class __$$FacturaLineaImplCopyWithImpl<$Res>
     extends _$FacturaLineaCopyWithImpl<$Res, _$FacturaLineaImpl>
     implements _$$FacturaLineaImplCopyWith<$Res> {
   __$$FacturaLineaImplCopyWithImpl(
-      _$FacturaLineaImpl _value, $Res Function(_$FacturaLineaImpl) _then)
-      : super(_value, _then);
+    _$FacturaLineaImpl _value,
+    $Res Function(_$FacturaLineaImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -174,65 +183,68 @@ class __$$FacturaLineaImplCopyWithImpl<$Res>
     Object? facturaOrigenId = freezed,
     Object? createdAt = freezed,
   }) {
-    return _then(_$FacturaLineaImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      tenantId: null == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String,
-      facturaId: null == facturaId
-          ? _value.facturaId
-          : facturaId // ignore: cast_nullable_to_non_nullable
-              as String,
-      conceptoId: freezed == conceptoId
-          ? _value.conceptoId
-          : conceptoId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      descripcion: null == descripcion
-          ? _value.descripcion
-          : descripcion // ignore: cast_nullable_to_non_nullable
-              as String,
-      cantidad: null == cantidad
-          ? _value.cantidad
-          : cantidad // ignore: cast_nullable_to_non_nullable
-              as int,
-      valorUnitario: null == valorUnitario
-          ? _value.valorUnitario
-          : valorUnitario // ignore: cast_nullable_to_non_nullable
-              as int,
-      subtotal: null == subtotal
-          ? _value.subtotal
-          : subtotal // ignore: cast_nullable_to_non_nullable
-              as int,
-      facturaOrigenId: freezed == facturaOrigenId
-          ? _value.facturaOrigenId
-          : facturaOrigenId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ));
+    return _then(
+      _$FacturaLineaImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        tenantId: null == tenantId
+            ? _value.tenantId
+            : tenantId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        facturaId: null == facturaId
+            ? _value.facturaId
+            : facturaId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        conceptoId: freezed == conceptoId
+            ? _value.conceptoId
+            : conceptoId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        descripcion: null == descripcion
+            ? _value.descripcion
+            : descripcion // ignore: cast_nullable_to_non_nullable
+                  as String,
+        cantidad: null == cantidad
+            ? _value.cantidad
+            : cantidad // ignore: cast_nullable_to_non_nullable
+                  as int,
+        valorUnitario: null == valorUnitario
+            ? _value.valorUnitario
+            : valorUnitario // ignore: cast_nullable_to_non_nullable
+                  as int,
+        subtotal: null == subtotal
+            ? _value.subtotal
+            : subtotal // ignore: cast_nullable_to_non_nullable
+                  as int,
+        facturaOrigenId: freezed == facturaOrigenId
+            ? _value.facturaOrigenId
+            : facturaOrigenId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        createdAt: freezed == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$FacturaLineaImpl implements _FacturaLinea {
-  const _$FacturaLineaImpl(
-      {required this.id,
-      @JsonKey(name: 'tenant_id') required this.tenantId,
-      @JsonKey(name: 'factura_id') required this.facturaId,
-      @JsonKey(name: 'concepto_id') this.conceptoId,
-      required this.descripcion,
-      this.cantidad = 1,
-      @JsonKey(name: 'valor_unitario') required this.valorUnitario,
-      required this.subtotal,
-      @JsonKey(name: 'factura_origen_id') this.facturaOrigenId,
-      @JsonKey(name: 'created_at') this.createdAt});
+  const _$FacturaLineaImpl({
+    required this.id,
+    @JsonKey(name: 'tenant_id') required this.tenantId,
+    @JsonKey(name: 'factura_id') required this.facturaId,
+    @JsonKey(name: 'concepto_id') this.conceptoId,
+    required this.descripcion,
+    this.cantidad = 1,
+    @JsonKey(name: 'valor_unitario') required this.valorUnitario,
+    required this.subtotal,
+    @JsonKey(name: 'factura_origen_id') this.facturaOrigenId,
+    @JsonKey(name: 'created_at') this.createdAt,
+  });
 
   factory _$FacturaLineaImpl.fromJson(Map<String, dynamic> json) =>
       _$$FacturaLineaImplFromJson(json);
@@ -299,17 +311,18 @@ class _$FacturaLineaImpl implements _FacturaLinea {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      tenantId,
-      facturaId,
-      conceptoId,
-      descripcion,
-      cantidad,
-      valorUnitario,
-      subtotal,
-      facturaOrigenId,
-      createdAt);
+    runtimeType,
+    id,
+    tenantId,
+    facturaId,
+    conceptoId,
+    descripcion,
+    cantidad,
+    valorUnitario,
+    subtotal,
+    facturaOrigenId,
+    createdAt,
+  );
 
   @JsonKey(ignore: true)
   @override
@@ -319,25 +332,23 @@ class _$FacturaLineaImpl implements _FacturaLinea {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$FacturaLineaImplToJson(
-      this,
-    );
+    return _$$FacturaLineaImplToJson(this);
   }
 }
 
 abstract class _FacturaLinea implements FacturaLinea {
-  const factory _FacturaLinea(
-          {required final String id,
-          @JsonKey(name: 'tenant_id') required final String tenantId,
-          @JsonKey(name: 'factura_id') required final String facturaId,
-          @JsonKey(name: 'concepto_id') final String? conceptoId,
-          required final String descripcion,
-          final int cantidad,
-          @JsonKey(name: 'valor_unitario') required final int valorUnitario,
-          required final int subtotal,
-          @JsonKey(name: 'factura_origen_id') final String? facturaOrigenId,
-          @JsonKey(name: 'created_at') final DateTime? createdAt}) =
-      _$FacturaLineaImpl;
+  const factory _FacturaLinea({
+    required final String id,
+    @JsonKey(name: 'tenant_id') required final String tenantId,
+    @JsonKey(name: 'factura_id') required final String facturaId,
+    @JsonKey(name: 'concepto_id') final String? conceptoId,
+    required final String descripcion,
+    final int cantidad,
+    @JsonKey(name: 'valor_unitario') required final int valorUnitario,
+    required final int subtotal,
+    @JsonKey(name: 'factura_origen_id') final String? facturaOrigenId,
+    @JsonKey(name: 'created_at') final DateTime? createdAt,
+  }) = _$FacturaLineaImpl;
 
   factory _FacturaLinea.fromJson(Map<String, dynamic> json) =
       _$FacturaLineaImpl.fromJson;

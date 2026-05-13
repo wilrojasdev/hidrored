@@ -93,8 +93,7 @@ Future<void> _confirmarCerrarSesion(BuildContext context, WidgetRef ref) async {
   final ok = await confirm(
     context,
     titulo: '¿Cerrar sesión?',
-    mensaje:
-        'Tendrás que iniciar sesión de nuevo para usar el sistema.',
+    mensaje: 'Tendrás que iniciar sesión de nuevo para usar el sistema.',
     confirmar: 'Cerrar sesión',
     cancelar: 'Cancelar',
     icono: Icons.logout,
@@ -201,7 +200,9 @@ class _Brand extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final raw = ref.watch(tenantProvider).valueOrNull?.nombre;
-    final titulo = (raw == null || raw.trim().isEmpty) ? kAppDisplayName : raw.trim();
+    final titulo = (raw == null || raw.trim().isEmpty)
+        ? kAppDisplayName
+        : raw.trim();
     final logo = const TenantLogo(size: 40);
     if (!extended) {
       return Padding(
@@ -373,7 +374,8 @@ class _MobileShellState extends ConsumerState<_MobileShell> {
               AppSpacing.gapSm,
               Expanded(
                 child: Text(
-                  ref.watch(tenantProvider).valueOrNull?.nombre ?? kAppDisplayName,
+                  ref.watch(tenantProvider).valueOrNull?.nombre ??
+                      kAppDisplayName,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -461,7 +463,8 @@ class _AppDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final titulo = ref.watch(tenantProvider).valueOrNull?.nombre ?? kAppDisplayName;
+    final titulo =
+        ref.watch(tenantProvider).valueOrNull?.nombre ?? kAppDisplayName;
     return Drawer(
       child: SafeArea(
         child: Column(

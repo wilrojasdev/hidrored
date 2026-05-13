@@ -7,27 +7,27 @@ part of 'dano.dart';
 // **************************************************************************
 
 _$DanoImpl _$$DanoImplFromJson(Map<String, dynamic> json) => _$DanoImpl(
-      id: json['id'] as String,
-      tenantId: json['tenant_id'] as String,
-      clienteId: json['cliente_id'] as String,
-      fechaReporte: DateTime.parse(json['fecha_reporte'] as String),
-      fechaSolucion: json['fecha_solucion'] == null
-          ? null
-          : DateTime.parse(json['fecha_solucion'] as String),
-      descripcion: json['descripcion'] as String,
-      costo: (json['costo'] as num?)?.toInt() ?? 0,
-      reportadoPor: json['reportado_por'] as String?,
-      estado: json['estado'] == null
-          ? EstadoDano.reportado
-          : _estadoFromJson(json['estado'] as String),
-      notas: json['notas'] as String?,
-      createdAt: json['created_at'] == null
-          ? null
-          : DateTime.parse(json['created_at'] as String),
-      updatedAt: json['updated_at'] == null
-          ? null
-          : DateTime.parse(json['updated_at'] as String),
-    );
+  id: json['id'] as String,
+  tenantId: json['tenant_id'] as String,
+  clienteId: json['cliente_id'] as String,
+  fechaReporte: DateTime.parse(json['fecha_reporte'] as String),
+  fechaSolucion: json['fecha_solucion'] == null
+      ? null
+      : DateTime.parse(json['fecha_solucion'] as String),
+  descripcion: json['descripcion'] as String,
+  costo: (json['costo'] as num?)?.toInt() ?? 0,
+  reportadoPor: json['reportado_por'] as String?,
+  estado: json['estado'] == null
+      ? EstadoDano.reportado
+      : _estadoFromJson(json['estado'] as String),
+  notas: json['notas'] as String?,
+  createdAt: json['created_at'] == null
+      ? null
+      : DateTime.parse(json['created_at'] as String),
+  updatedAt: json['updated_at'] == null
+      ? null
+      : DateTime.parse(json['updated_at'] as String),
+);
 
 Map<String, dynamic> _$$DanoImplToJson(_$DanoImpl instance) =>
     <String, dynamic>{

@@ -12,7 +12,8 @@ part of 'dano.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 Dano _$DanoFromJson(Map<String, dynamic> json) {
   return _Dano.fromJson(json);
@@ -51,20 +52,21 @@ abstract class $DanoCopyWith<$Res> {
   factory $DanoCopyWith(Dano value, $Res Function(Dano) then) =
       _$DanoCopyWithImpl<$Res, Dano>;
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'tenant_id') String tenantId,
-      @JsonKey(name: 'cliente_id') String clienteId,
-      @JsonKey(name: 'fecha_reporte') DateTime fechaReporte,
-      @JsonKey(name: 'fecha_solucion') DateTime? fechaSolucion,
-      String descripcion,
-      int costo,
-      @JsonKey(name: 'reportado_por') String? reportadoPor,
-      @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
-      EstadoDano estado,
-      String? notas,
-      @JsonKey(name: 'created_at') DateTime? createdAt,
-      @JsonKey(name: 'updated_at') DateTime? updatedAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'tenant_id') String tenantId,
+    @JsonKey(name: 'cliente_id') String clienteId,
+    @JsonKey(name: 'fecha_reporte') DateTime fechaReporte,
+    @JsonKey(name: 'fecha_solucion') DateTime? fechaSolucion,
+    String descripcion,
+    int costo,
+    @JsonKey(name: 'reportado_por') String? reportadoPor,
+    @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
+    EstadoDano estado,
+    String? notas,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
+  });
 }
 
 /// @nodoc
@@ -93,80 +95,85 @@ class _$DanoCopyWithImpl<$Res, $Val extends Dano>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      tenantId: null == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String,
-      clienteId: null == clienteId
-          ? _value.clienteId
-          : clienteId // ignore: cast_nullable_to_non_nullable
-              as String,
-      fechaReporte: null == fechaReporte
-          ? _value.fechaReporte
-          : fechaReporte // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      fechaSolucion: freezed == fechaSolucion
-          ? _value.fechaSolucion
-          : fechaSolucion // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      descripcion: null == descripcion
-          ? _value.descripcion
-          : descripcion // ignore: cast_nullable_to_non_nullable
-              as String,
-      costo: null == costo
-          ? _value.costo
-          : costo // ignore: cast_nullable_to_non_nullable
-              as int,
-      reportadoPor: freezed == reportadoPor
-          ? _value.reportadoPor
-          : reportadoPor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      estado: null == estado
-          ? _value.estado
-          : estado // ignore: cast_nullable_to_non_nullable
-              as EstadoDano,
-      notas: freezed == notas
-          ? _value.notas
-          : notas // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      updatedAt: freezed == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            tenantId: null == tenantId
+                ? _value.tenantId
+                : tenantId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            clienteId: null == clienteId
+                ? _value.clienteId
+                : clienteId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            fechaReporte: null == fechaReporte
+                ? _value.fechaReporte
+                : fechaReporte // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            fechaSolucion: freezed == fechaSolucion
+                ? _value.fechaSolucion
+                : fechaSolucion // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            descripcion: null == descripcion
+                ? _value.descripcion
+                : descripcion // ignore: cast_nullable_to_non_nullable
+                      as String,
+            costo: null == costo
+                ? _value.costo
+                : costo // ignore: cast_nullable_to_non_nullable
+                      as int,
+            reportadoPor: freezed == reportadoPor
+                ? _value.reportadoPor
+                : reportadoPor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            estado: null == estado
+                ? _value.estado
+                : estado // ignore: cast_nullable_to_non_nullable
+                      as EstadoDano,
+            notas: freezed == notas
+                ? _value.notas
+                : notas // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            createdAt: freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            updatedAt: freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$DanoImplCopyWith<$Res> implements $DanoCopyWith<$Res> {
   factory _$$DanoImplCopyWith(
-          _$DanoImpl value, $Res Function(_$DanoImpl) then) =
-      __$$DanoImplCopyWithImpl<$Res>;
+    _$DanoImpl value,
+    $Res Function(_$DanoImpl) then,
+  ) = __$$DanoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'tenant_id') String tenantId,
-      @JsonKey(name: 'cliente_id') String clienteId,
-      @JsonKey(name: 'fecha_reporte') DateTime fechaReporte,
-      @JsonKey(name: 'fecha_solucion') DateTime? fechaSolucion,
-      String descripcion,
-      int costo,
-      @JsonKey(name: 'reportado_por') String? reportadoPor,
-      @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
-      EstadoDano estado,
-      String? notas,
-      @JsonKey(name: 'created_at') DateTime? createdAt,
-      @JsonKey(name: 'updated_at') DateTime? updatedAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'tenant_id') String tenantId,
+    @JsonKey(name: 'cliente_id') String clienteId,
+    @JsonKey(name: 'fecha_reporte') DateTime fechaReporte,
+    @JsonKey(name: 'fecha_solucion') DateTime? fechaSolucion,
+    String descripcion,
+    int costo,
+    @JsonKey(name: 'reportado_por') String? reportadoPor,
+    @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
+    EstadoDano estado,
+    String? notas,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
+  });
 }
 
 /// @nodoc
@@ -174,7 +181,7 @@ class __$$DanoImplCopyWithImpl<$Res>
     extends _$DanoCopyWithImpl<$Res, _$DanoImpl>
     implements _$$DanoImplCopyWith<$Res> {
   __$$DanoImplCopyWithImpl(_$DanoImpl _value, $Res Function(_$DanoImpl) _then)
-      : super(_value, _then);
+    : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -192,76 +199,79 @@ class __$$DanoImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
-    return _then(_$DanoImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      tenantId: null == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String,
-      clienteId: null == clienteId
-          ? _value.clienteId
-          : clienteId // ignore: cast_nullable_to_non_nullable
-              as String,
-      fechaReporte: null == fechaReporte
-          ? _value.fechaReporte
-          : fechaReporte // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      fechaSolucion: freezed == fechaSolucion
-          ? _value.fechaSolucion
-          : fechaSolucion // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      descripcion: null == descripcion
-          ? _value.descripcion
-          : descripcion // ignore: cast_nullable_to_non_nullable
-              as String,
-      costo: null == costo
-          ? _value.costo
-          : costo // ignore: cast_nullable_to_non_nullable
-              as int,
-      reportadoPor: freezed == reportadoPor
-          ? _value.reportadoPor
-          : reportadoPor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      estado: null == estado
-          ? _value.estado
-          : estado // ignore: cast_nullable_to_non_nullable
-              as EstadoDano,
-      notas: freezed == notas
-          ? _value.notas
-          : notas // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      updatedAt: freezed == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ));
+    return _then(
+      _$DanoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        tenantId: null == tenantId
+            ? _value.tenantId
+            : tenantId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        clienteId: null == clienteId
+            ? _value.clienteId
+            : clienteId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        fechaReporte: null == fechaReporte
+            ? _value.fechaReporte
+            : fechaReporte // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        fechaSolucion: freezed == fechaSolucion
+            ? _value.fechaSolucion
+            : fechaSolucion // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        descripcion: null == descripcion
+            ? _value.descripcion
+            : descripcion // ignore: cast_nullable_to_non_nullable
+                  as String,
+        costo: null == costo
+            ? _value.costo
+            : costo // ignore: cast_nullable_to_non_nullable
+                  as int,
+        reportadoPor: freezed == reportadoPor
+            ? _value.reportadoPor
+            : reportadoPor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        estado: null == estado
+            ? _value.estado
+            : estado // ignore: cast_nullable_to_non_nullable
+                  as EstadoDano,
+        notas: freezed == notas
+            ? _value.notas
+            : notas // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        createdAt: freezed == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        updatedAt: freezed == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$DanoImpl implements _Dano {
-  const _$DanoImpl(
-      {required this.id,
-      @JsonKey(name: 'tenant_id') required this.tenantId,
-      @JsonKey(name: 'cliente_id') required this.clienteId,
-      @JsonKey(name: 'fecha_reporte') required this.fechaReporte,
-      @JsonKey(name: 'fecha_solucion') this.fechaSolucion,
-      required this.descripcion,
-      this.costo = 0,
-      @JsonKey(name: 'reportado_por') this.reportadoPor,
-      @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
-      this.estado = EstadoDano.reportado,
-      this.notas,
-      @JsonKey(name: 'created_at') this.createdAt,
-      @JsonKey(name: 'updated_at') this.updatedAt});
+  const _$DanoImpl({
+    required this.id,
+    @JsonKey(name: 'tenant_id') required this.tenantId,
+    @JsonKey(name: 'cliente_id') required this.clienteId,
+    @JsonKey(name: 'fecha_reporte') required this.fechaReporte,
+    @JsonKey(name: 'fecha_solucion') this.fechaSolucion,
+    required this.descripcion,
+    this.costo = 0,
+    @JsonKey(name: 'reportado_por') this.reportadoPor,
+    @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
+    this.estado = EstadoDano.reportado,
+    this.notas,
+    @JsonKey(name: 'created_at') this.createdAt,
+    @JsonKey(name: 'updated_at') this.updatedAt,
+  });
 
   factory _$DanoImpl.fromJson(Map<String, dynamic> json) =>
       _$$DanoImplFromJson(json);
@@ -335,19 +345,20 @@ class _$DanoImpl implements _Dano {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      tenantId,
-      clienteId,
-      fechaReporte,
-      fechaSolucion,
-      descripcion,
-      costo,
-      reportadoPor,
-      estado,
-      notas,
-      createdAt,
-      updatedAt);
+    runtimeType,
+    id,
+    tenantId,
+    clienteId,
+    fechaReporte,
+    fechaSolucion,
+    descripcion,
+    costo,
+    reportadoPor,
+    estado,
+    notas,
+    createdAt,
+    updatedAt,
+  );
 
   @JsonKey(ignore: true)
   @override
@@ -357,27 +368,26 @@ class _$DanoImpl implements _Dano {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$DanoImplToJson(
-      this,
-    );
+    return _$$DanoImplToJson(this);
   }
 }
 
 abstract class _Dano implements Dano {
-  const factory _Dano(
-      {required final String id,
-      @JsonKey(name: 'tenant_id') required final String tenantId,
-      @JsonKey(name: 'cliente_id') required final String clienteId,
-      @JsonKey(name: 'fecha_reporte') required final DateTime fechaReporte,
-      @JsonKey(name: 'fecha_solucion') final DateTime? fechaSolucion,
-      required final String descripcion,
-      final int costo,
-      @JsonKey(name: 'reportado_por') final String? reportadoPor,
-      @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
-      final EstadoDano estado,
-      final String? notas,
-      @JsonKey(name: 'created_at') final DateTime? createdAt,
-      @JsonKey(name: 'updated_at') final DateTime? updatedAt}) = _$DanoImpl;
+  const factory _Dano({
+    required final String id,
+    @JsonKey(name: 'tenant_id') required final String tenantId,
+    @JsonKey(name: 'cliente_id') required final String clienteId,
+    @JsonKey(name: 'fecha_reporte') required final DateTime fechaReporte,
+    @JsonKey(name: 'fecha_solucion') final DateTime? fechaSolucion,
+    required final String descripcion,
+    final int costo,
+    @JsonKey(name: 'reportado_por') final String? reportadoPor,
+    @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
+    final EstadoDano estado,
+    final String? notas,
+    @JsonKey(name: 'created_at') final DateTime? createdAt,
+    @JsonKey(name: 'updated_at') final DateTime? updatedAt,
+  }) = _$DanoImpl;
 
   factory _Dano.fromJson(Map<String, dynamic> json) = _$DanoImpl.fromJson;
 

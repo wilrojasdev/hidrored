@@ -75,17 +75,19 @@ class MoraCalculator {
   static List<DeudaParaMora> descomponer({
     required List<Factura> facturasPendientes,
     required Map<String, List<SubDeudaRefacturada>>
-        saldosRefacturadosPorFactura,
+    saldosRefacturadosPorFactura,
   }) {
     final deudas = <DeudaParaMora>[];
     for (final f in facturasPendientes) {
       final refs = saldosRefacturadosPorFactura[f.id] ?? const [];
       var saldoRefacturadoTotal = 0;
       for (final r in refs) {
-        deudas.add(DeudaParaMora(
-          fechaVencimiento: r.fechaVencimientoOrigen,
-          moraYaFacturada: 0,
-        ));
+        deudas.add(
+          DeudaParaMora(
+            fechaVencimiento: r.fechaVencimientoOrigen,
+            moraYaFacturada: 0,
+          ),
+        );
         saldoRefacturadoTotal += r.monto;
       }
       // La parte "nativa" de la factura genera otra sub-deuda con su
@@ -93,10 +95,12 @@ class MoraCalculator {
       // aqui (al ser la factura "viva", contiene toda la mora capturada).
       final saldoNativo = f.total - saldoRefacturadoTotal;
       if (saldoNativo > 0 || refs.isEmpty) {
-        deudas.add(DeudaParaMora(
-          fechaVencimiento: f.fechaVencimiento,
-          moraYaFacturada: f.valorMora,
-        ));
+        deudas.add(
+          DeudaParaMora(
+            fechaVencimiento: f.fechaVencimiento,
+            moraYaFacturada: f.valorMora,
+          ),
+        );
       } else {
         // 100% refacturada (sin parte nativa): la mora ya facturada se
         // atribuye a la primera sub-deuda refacturada para no perderla.

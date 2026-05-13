@@ -288,7 +288,8 @@ class _LoteRecibosButtons extends ConsumerWidget {
             OutlinedButton.icon(
               onPressed: vacio
                   ? null
-                  : () => ReciboActions.compartirLote(context, ref, imprimibles),
+                  : () =>
+                        ReciboActions.compartirLote(context, ref, imprimibles),
               icon: const Icon(Icons.share_outlined),
               label: Text('Compartir PDF ($n)'),
             ),

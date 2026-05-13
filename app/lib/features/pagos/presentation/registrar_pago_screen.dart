@@ -216,182 +216,192 @@ class _RegistrarPagoScreenState extends ConsumerState<RegistrarPagoScreen> {
                         maxWidth: constraints.maxWidth,
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: AppSpacing.xxl,
-                        ),
+                        padding: const EdgeInsets.only(bottom: AppSpacing.xxl),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(AppSpacing.xl),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Cliente',
-                                style: theme.textTheme.titleMedium,
-                              ),
-                              AppSpacing.gapMd,
-                              if (_cliente == null)
-                                FilledButton.tonalIcon(
-                                  onPressed: _saving
-                                      ? null
-                                      : _seleccionarCliente,
-                                  icon: const Icon(Icons.person_search),
-                                  label: const Text('Seleccionar cliente'),
-                                )
-                              else
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  leading: CircleAvatar(
-                                    backgroundColor:
-                                        theme.colorScheme.primaryContainer,
-                                    child: Text(
-                                      '${_cliente!.codigo}',
-                                      style: TextStyle(
-                                        color: theme
-                                            .colorScheme
-                                            .onPrimaryContainer,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  title: Text(
-                                    _cliente!.nombre,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  subtitle: Text(
-                                    '${formatCedula(_cliente!.cedula)}'
-                                    '${_cliente!.direccion == null ? '' : ' · ${_cliente!.direccion}'}',
-                                  ),
-                                  trailing: TextButton(
-                                    onPressed: _saving
-                                        ? null
-                                        : _seleccionarCliente,
-                                    child: const Text('Cambiar'),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      if (_cliente != null) ...[
-                        AppSpacing.gapLg,
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(AppSpacing.xl),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Datos del pago',
-                                  style: theme.textTheme.titleMedium,
-                                ),
-                                AppSpacing.gapLg,
-                                Row(
+                            Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(AppSpacing.xl),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Expanded(
-                                      child: InkWell(
-                                        onTap: _saving
+                                    Text(
+                                      'Cliente',
+                                      style: theme.textTheme.titleMedium,
+                                    ),
+                                    AppSpacing.gapMd,
+                                    if (_cliente == null)
+                                      FilledButton.tonalIcon(
+                                        onPressed: _saving
                                             ? null
-                                            : _seleccionarFecha,
-                                        borderRadius: BorderRadius.circular(
-                                          AppSizes.radiusSm,
+                                            : _seleccionarCliente,
+                                        icon: const Icon(Icons.person_search),
+                                        label: const Text(
+                                          'Seleccionar cliente',
                                         ),
-                                        child: InputDecorator(
-                                          decoration: const InputDecoration(
-                                            labelText: 'Fecha',
-                                            prefixIcon: Icon(
-                                              Icons.calendar_today,
+                                      )
+                                    else
+                                      ListTile(
+                                        contentPadding: EdgeInsets.zero,
+                                        leading: CircleAvatar(
+                                          backgroundColor: theme
+                                              .colorScheme
+                                              .primaryContainer,
+                                          child: Text(
+                                            '${_cliente!.codigo}',
+                                            style: TextStyle(
+                                              color: theme
+                                                  .colorScheme
+                                                  .onPrimaryContainer,
+                                              fontWeight: FontWeight.w600,
                                             ),
                                           ),
-                                          child: Text(formatFecha(_fecha)),
                                         ),
-                                      ),
-                                    ),
-                                    AppSpacing.gapLg,
-                                    Expanded(
-                                      child: DropdownButtonFormField<MetodoPago>(
-                                        initialValue: _metodo,
-                                        decoration: const InputDecoration(
-                                          labelText: 'Método',
-                                          prefixIcon: Icon(
-                                            Icons
-                                                .account_balance_wallet_outlined,
+                                        title: Text(
+                                          _cliente!.nombre,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                        onChanged: _saving
-                                            ? null
-                                            : (v) =>
-                                                  setState(() => _metodo = v!),
-                                        items: [
-                                          for (final m in MetodoPago.values)
-                                            DropdownMenuItem(
-                                              value: m,
-                                              child: Text(m.label),
-                                            ),
-                                        ],
+                                        subtitle: Text(
+                                          '${formatCedula(_cliente!.cedula)}'
+                                          '${_cliente!.direccion == null ? '' : ' · ${_cliente!.direccion}'}',
+                                        ),
+                                        trailing: TextButton(
+                                          onPressed: _saving
+                                              ? null
+                                              : _seleccionarCliente,
+                                          child: const Text('Cambiar'),
+                                        ),
                                       ),
-                                    ),
                                   ],
                                 ),
-                                AppSpacing.gapMd,
-                                MoneyField(
-                                  controller: _valorCtrl,
-                                  label: 'Valor recibido',
-                                  required: true,
-                                  allowZero: false,
-                                  enabled: !_saving,
-                                  onChanged: (_) => setState(() {}),
-                                ),
-                                AppSpacing.gapMd,
-                                TextField(
-                                  controller: _referenciaCtrl,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Referencia (opcional)',
-                                    hintText:
-                                        'Ej. comprobante Bancolombia 12345',
-                                    prefixIcon: Icon(Icons.receipt_outlined),
-                                  ),
-                                  enabled: !_saving,
-                                  onChanged: (_) => setState(() {}),
-                                ),
-                                AppSpacing.gapMd,
-                                TextField(
-                                  controller: _notasCtrl,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Notas (opcional)',
-                                    prefixIcon: Icon(Icons.note_outlined),
-                                  ),
-                                  enabled: !_saving,
-                                  maxLines: 2,
-                                  textCapitalization:
-                                      TextCapitalization.sentences,
-                                  onChanged: (_) => setState(() {}),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
+                            if (_cliente != null) ...[
+                              AppSpacing.gapLg,
+                              Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(AppSpacing.xl),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Datos del pago',
+                                        style: theme.textTheme.titleMedium,
+                                      ),
+                                      AppSpacing.gapLg,
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: InkWell(
+                                              onTap: _saving
+                                                  ? null
+                                                  : _seleccionarFecha,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                    AppSizes.radiusSm,
+                                                  ),
+                                              child: InputDecorator(
+                                                decoration:
+                                                    const InputDecoration(
+                                                      labelText: 'Fecha',
+                                                      prefixIcon: Icon(
+                                                        Icons.calendar_today,
+                                                      ),
+                                                    ),
+                                                child: Text(
+                                                  formatFecha(_fecha),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          AppSpacing.gapLg,
+                                          Expanded(
+                                            child: DropdownButtonFormField<MetodoPago>(
+                                              initialValue: _metodo,
+                                              decoration: const InputDecoration(
+                                                labelText: 'Método',
+                                                prefixIcon: Icon(
+                                                  Icons
+                                                      .account_balance_wallet_outlined,
+                                                ),
+                                              ),
+                                              onChanged: _saving
+                                                  ? null
+                                                  : (v) => setState(
+                                                      () => _metodo = v!,
+                                                    ),
+                                              items: [
+                                                for (final m
+                                                    in MetodoPago.values)
+                                                  DropdownMenuItem(
+                                                    value: m,
+                                                    child: Text(m.label),
+                                                  ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      AppSpacing.gapMd,
+                                      MoneyField(
+                                        controller: _valorCtrl,
+                                        label: 'Valor recibido',
+                                        required: true,
+                                        allowZero: false,
+                                        enabled: !_saving,
+                                        onChanged: (_) => setState(() {}),
+                                      ),
+                                      AppSpacing.gapMd,
+                                      TextField(
+                                        controller: _referenciaCtrl,
+                                        decoration: const InputDecoration(
+                                          labelText: 'Referencia (opcional)',
+                                          hintText:
+                                              'Ej. comprobante Bancolombia 12345',
+                                          prefixIcon: Icon(
+                                            Icons.receipt_outlined,
+                                          ),
+                                        ),
+                                        enabled: !_saving,
+                                        onChanged: (_) => setState(() {}),
+                                      ),
+                                      AppSpacing.gapMd,
+                                      TextField(
+                                        controller: _notasCtrl,
+                                        decoration: const InputDecoration(
+                                          labelText: 'Notas (opcional)',
+                                          prefixIcon: Icon(Icons.note_outlined),
+                                        ),
+                                        enabled: !_saving,
+                                        maxLines: 2,
+                                        textCapitalization:
+                                            TextCapitalization.sentences,
+                                        onChanged: (_) => setState(() {}),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              AppSpacing.gapLg,
+                              _SaldoYAplicacionCard(
+                                clienteId: _cliente!.id,
+                                valorCtrl: _valorCtrl,
+                                saving: _saving,
+                                onPrefill: () => setState(() {}),
+                                onConfirm: _registrar,
+                              ),
+                            ],
+                          ],
                         ),
-                        AppSpacing.gapLg,
-                        _SaldoYAplicacionCard(
-                          clienteId: _cliente!.id,
-                          valorCtrl: _valorCtrl,
-                          saving: _saving,
-                          onPrefill: () => setState(() {}),
-                          onConfirm: _registrar,
-                        ),
-                      ],
-                    ],
-                  ),
-            ),
-          ),
-        );
-      },
-    ),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -633,10 +643,9 @@ class _SaldoYAplicacionCard extends ConsumerWidget {
                       children: [
                         const Spacer(),
                         FilledButton.icon(
-                          onPressed:
-                              (saving || aplicacion.aplicaciones.isEmpty)
-                                  ? null
-                                  : () => onConfirm(aplicacion),
+                          onPressed: (saving || aplicacion.aplicaciones.isEmpty)
+                              ? null
+                              : () => onConfirm(aplicacion),
                           icon: saving
                               ? const SizedBox(
                                   width: 16,

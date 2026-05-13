@@ -298,11 +298,7 @@ class _ClienteTile extends StatelessWidget {
                 maxLines: 4,
                 overflow: TextOverflow.ellipsis,
               )
-            : Text(
-                subtitle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+            : Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
         isThreeLine: isMobile,
         trailing: isMobile
             ? const Icon(Icons.chevron_right)

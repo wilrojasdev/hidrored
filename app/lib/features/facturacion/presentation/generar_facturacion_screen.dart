@@ -68,8 +68,9 @@ class _GenerarFacturacionScreenState
   Future<void> _ejecutar() async {
     final cantidad = _preview!.where((p) => p.tieneCargos).length;
     final total = _preview!.fold<int>(0, (s, p) => s + p.totalRecibo);
-    final conRefacturadas =
-        _preview!.where((p) => p.cantidadRefacturadas > 0).length;
+    final conRefacturadas = _preview!
+        .where((p) => p.cantidadRefacturadas > 0)
+        .length;
     final mensaje = StringBuffer(
       'Se emitirán ${pluralES(cantidad, "factura", "facturas")} '
       'para ${formatPeriodo(_periodo)}.\n\n'

@@ -65,7 +65,9 @@ class AppListTypography {
 
   static TextStyle monto(ThemeData theme, {Color? color}) {
     final base =
-        theme.textTheme.titleLarge ?? theme.textTheme.titleMedium ?? const TextStyle();
+        theme.textTheme.titleLarge ??
+        theme.textTheme.titleMedium ??
+        const TextStyle();
     return base.copyWith(
       fontWeight: FontWeight.w700,
       letterSpacing: -0.25,

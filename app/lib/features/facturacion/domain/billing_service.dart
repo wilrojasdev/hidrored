@@ -191,9 +191,7 @@ class BillingService {
 
   /// Devuelve un mapa `factura_id -> sum(monto_aplicado)` para las
   /// facturas dadas. Si una factura no tiene pagos, no aparece (default 0).
-  Future<Map<String, int>> _cargarSaldosPagados(
-    List<String> facturaIds,
-  ) async {
+  Future<Map<String, int>> _cargarSaldosPagados(List<String> facturaIds) async {
     if (facturaIds.isEmpty) return const {};
     final data = await _client
         .from('pago_factura')
@@ -254,7 +252,8 @@ class BillingService {
     // las inserta server-side al absorber las facturas pendientes
     // anteriores y recalcula `total` como suma real de lineas. Lo que
     // mandamos como `total` es solo orientativo (el RPC lo sobrescribe).
-    final totalNativo = p.valorMensualidad +
+    final totalNativo =
+        p.valorMensualidad +
         p.valorMora +
         p.costoReconexion +
         p.totalCargosExtras;
@@ -290,14 +289,16 @@ class BillingService {
       final pagado = saldosPagadosPorFactura[f.id] ?? 0;
       final saldo = f.total - pagado;
       if (saldo <= 0) continue;
-      lineasRefacturadas.add(SaldoRefacturado(
-        facturaOrigenId: f.id,
-        numero: f.numero,
-        periodo: f.periodo,
-        fechaVencimiento: f.fechaVencimiento,
-        moraYaFacturadaEnOrigen: f.valorMora,
-        saldo: saldo,
-      ));
+      lineasRefacturadas.add(
+        SaldoRefacturado(
+          facturaOrigenId: f.id,
+          numero: f.numero,
+          periodo: f.periodo,
+          fechaVencimiento: f.fechaVencimiento,
+          moraYaFacturadaEnOrigen: f.valorMora,
+          saldo: saldo,
+        ),
+      );
     }
 
     // Mora: descomposicion en sub-deudas. Como aun NO se ha emitido la

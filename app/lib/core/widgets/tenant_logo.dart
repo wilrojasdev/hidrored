@@ -6,11 +6,7 @@ import '../theme/app_theme.dart';
 /// Logo por defecto del tenant (mismo asset que recibos PDF).
 /// Si falla la carga, muestra el icono de marca.
 class TenantLogo extends StatelessWidget {
-  const TenantLogo({
-    super.key,
-    required this.size,
-    this.borderRadius,
-  });
+  const TenantLogo({super.key, required this.size, this.borderRadius});
 
   final double size;
   final BorderRadius? borderRadius;
@@ -19,8 +15,7 @@ class TenantLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final r =
-        borderRadius ?? BorderRadius.circular(AppSizes.radiusSm);
+    final r = borderRadius ?? BorderRadius.circular(AppSizes.radiusSm);
     return ClipRRect(
       borderRadius: r,
       child: SizedBox(

@@ -115,7 +115,9 @@ class _MorososTab extends ConsumerWidget {
                 const Divider(height: 1),
                 Expanded(
                   child: ListView.separated(
-                    padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppSpacing.xs,
+                    ),
                     itemCount: lista.length,
                     separatorBuilder: (_, _) => const Divider(height: 1),
                     itemBuilder: (context, i) {

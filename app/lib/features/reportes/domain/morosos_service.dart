@@ -22,6 +22,7 @@ class Moroso {
   final Cliente cliente;
   final int cantidadFacturas;
   final int totalAdeudado;
+
   /// Días hábiles (CO) transcurridos después de la fecha de vencimiento.
   final int diasHabilesMora;
 }

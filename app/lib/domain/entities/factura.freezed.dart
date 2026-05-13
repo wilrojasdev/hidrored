@@ -12,7 +12,8 @@ part of 'factura.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 Factura _$FacturaFromJson(Map<String, dynamic> json) {
   return _Factura.fromJson(json);
@@ -59,24 +60,25 @@ abstract class $FacturaCopyWith<$Res> {
   factory $FacturaCopyWith(Factura value, $Res Function(Factura) then) =
       _$FacturaCopyWithImpl<$Res, Factura>;
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'tenant_id') String tenantId,
-      @JsonKey(name: 'cliente_id') String clienteId,
-      String numero,
-      String periodo,
-      @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson) TipoFactura tipo,
-      @JsonKey(name: 'fecha_emision') DateTime fechaEmision,
-      @JsonKey(name: 'fecha_vencimiento') DateTime fechaVencimiento,
-      @JsonKey(name: 'valor_mensualidad') int valorMensualidad,
-      @JsonKey(name: 'valor_mora') int valorMora,
-      int total,
-      @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
-      EstadoFactura estado,
-      @JsonKey(name: 'motivo_anulacion') String? motivoAnulacion,
-      @JsonKey(name: 'refacturada_en_id') String? refacturadaEnId,
-      @JsonKey(name: 'created_at') DateTime? createdAt,
-      @JsonKey(name: 'updated_at') DateTime? updatedAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'tenant_id') String tenantId,
+    @JsonKey(name: 'cliente_id') String clienteId,
+    String numero,
+    String periodo,
+    @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson) TipoFactura tipo,
+    @JsonKey(name: 'fecha_emision') DateTime fechaEmision,
+    @JsonKey(name: 'fecha_vencimiento') DateTime fechaVencimiento,
+    @JsonKey(name: 'valor_mensualidad') int valorMensualidad,
+    @JsonKey(name: 'valor_mora') int valorMora,
+    int total,
+    @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
+    EstadoFactura estado,
+    @JsonKey(name: 'motivo_anulacion') String? motivoAnulacion,
+    @JsonKey(name: 'refacturada_en_id') String? refacturadaEnId,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
+  });
 }
 
 /// @nodoc
@@ -109,100 +111,105 @@ class _$FacturaCopyWithImpl<$Res, $Val extends Factura>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      tenantId: null == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String,
-      clienteId: null == clienteId
-          ? _value.clienteId
-          : clienteId // ignore: cast_nullable_to_non_nullable
-              as String,
-      numero: null == numero
-          ? _value.numero
-          : numero // ignore: cast_nullable_to_non_nullable
-              as String,
-      periodo: null == periodo
-          ? _value.periodo
-          : periodo // ignore: cast_nullable_to_non_nullable
-              as String,
-      tipo: null == tipo
-          ? _value.tipo
-          : tipo // ignore: cast_nullable_to_non_nullable
-              as TipoFactura,
-      fechaEmision: null == fechaEmision
-          ? _value.fechaEmision
-          : fechaEmision // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      fechaVencimiento: null == fechaVencimiento
-          ? _value.fechaVencimiento
-          : fechaVencimiento // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      valorMensualidad: null == valorMensualidad
-          ? _value.valorMensualidad
-          : valorMensualidad // ignore: cast_nullable_to_non_nullable
-              as int,
-      valorMora: null == valorMora
-          ? _value.valorMora
-          : valorMora // ignore: cast_nullable_to_non_nullable
-              as int,
-      total: null == total
-          ? _value.total
-          : total // ignore: cast_nullable_to_non_nullable
-              as int,
-      estado: null == estado
-          ? _value.estado
-          : estado // ignore: cast_nullable_to_non_nullable
-              as EstadoFactura,
-      motivoAnulacion: freezed == motivoAnulacion
-          ? _value.motivoAnulacion
-          : motivoAnulacion // ignore: cast_nullable_to_non_nullable
-              as String?,
-      refacturadaEnId: freezed == refacturadaEnId
-          ? _value.refacturadaEnId
-          : refacturadaEnId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      updatedAt: freezed == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            tenantId: null == tenantId
+                ? _value.tenantId
+                : tenantId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            clienteId: null == clienteId
+                ? _value.clienteId
+                : clienteId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            numero: null == numero
+                ? _value.numero
+                : numero // ignore: cast_nullable_to_non_nullable
+                      as String,
+            periodo: null == periodo
+                ? _value.periodo
+                : periodo // ignore: cast_nullable_to_non_nullable
+                      as String,
+            tipo: null == tipo
+                ? _value.tipo
+                : tipo // ignore: cast_nullable_to_non_nullable
+                      as TipoFactura,
+            fechaEmision: null == fechaEmision
+                ? _value.fechaEmision
+                : fechaEmision // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            fechaVencimiento: null == fechaVencimiento
+                ? _value.fechaVencimiento
+                : fechaVencimiento // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            valorMensualidad: null == valorMensualidad
+                ? _value.valorMensualidad
+                : valorMensualidad // ignore: cast_nullable_to_non_nullable
+                      as int,
+            valorMora: null == valorMora
+                ? _value.valorMora
+                : valorMora // ignore: cast_nullable_to_non_nullable
+                      as int,
+            total: null == total
+                ? _value.total
+                : total // ignore: cast_nullable_to_non_nullable
+                      as int,
+            estado: null == estado
+                ? _value.estado
+                : estado // ignore: cast_nullable_to_non_nullable
+                      as EstadoFactura,
+            motivoAnulacion: freezed == motivoAnulacion
+                ? _value.motivoAnulacion
+                : motivoAnulacion // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            refacturadaEnId: freezed == refacturadaEnId
+                ? _value.refacturadaEnId
+                : refacturadaEnId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            createdAt: freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            updatedAt: freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$FacturaImplCopyWith<$Res> implements $FacturaCopyWith<$Res> {
   factory _$$FacturaImplCopyWith(
-          _$FacturaImpl value, $Res Function(_$FacturaImpl) then) =
-      __$$FacturaImplCopyWithImpl<$Res>;
+    _$FacturaImpl value,
+    $Res Function(_$FacturaImpl) then,
+  ) = __$$FacturaImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'tenant_id') String tenantId,
-      @JsonKey(name: 'cliente_id') String clienteId,
-      String numero,
-      String periodo,
-      @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson) TipoFactura tipo,
-      @JsonKey(name: 'fecha_emision') DateTime fechaEmision,
-      @JsonKey(name: 'fecha_vencimiento') DateTime fechaVencimiento,
-      @JsonKey(name: 'valor_mensualidad') int valorMensualidad,
-      @JsonKey(name: 'valor_mora') int valorMora,
-      int total,
-      @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
-      EstadoFactura estado,
-      @JsonKey(name: 'motivo_anulacion') String? motivoAnulacion,
-      @JsonKey(name: 'refacturada_en_id') String? refacturadaEnId,
-      @JsonKey(name: 'created_at') DateTime? createdAt,
-      @JsonKey(name: 'updated_at') DateTime? updatedAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'tenant_id') String tenantId,
+    @JsonKey(name: 'cliente_id') String clienteId,
+    String numero,
+    String periodo,
+    @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson) TipoFactura tipo,
+    @JsonKey(name: 'fecha_emision') DateTime fechaEmision,
+    @JsonKey(name: 'fecha_vencimiento') DateTime fechaVencimiento,
+    @JsonKey(name: 'valor_mensualidad') int valorMensualidad,
+    @JsonKey(name: 'valor_mora') int valorMora,
+    int total,
+    @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
+    EstadoFactura estado,
+    @JsonKey(name: 'motivo_anulacion') String? motivoAnulacion,
+    @JsonKey(name: 'refacturada_en_id') String? refacturadaEnId,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
+  });
 }
 
 /// @nodoc
@@ -210,8 +217,9 @@ class __$$FacturaImplCopyWithImpl<$Res>
     extends _$FacturaCopyWithImpl<$Res, _$FacturaImpl>
     implements _$$FacturaImplCopyWith<$Res> {
   __$$FacturaImplCopyWithImpl(
-      _$FacturaImpl _value, $Res Function(_$FacturaImpl) _then)
-      : super(_value, _then);
+    _$FacturaImpl _value,
+    $Res Function(_$FacturaImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -233,98 +241,100 @@ class __$$FacturaImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
-    return _then(_$FacturaImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      tenantId: null == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String,
-      clienteId: null == clienteId
-          ? _value.clienteId
-          : clienteId // ignore: cast_nullable_to_non_nullable
-              as String,
-      numero: null == numero
-          ? _value.numero
-          : numero // ignore: cast_nullable_to_non_nullable
-              as String,
-      periodo: null == periodo
-          ? _value.periodo
-          : periodo // ignore: cast_nullable_to_non_nullable
-              as String,
-      tipo: null == tipo
-          ? _value.tipo
-          : tipo // ignore: cast_nullable_to_non_nullable
-              as TipoFactura,
-      fechaEmision: null == fechaEmision
-          ? _value.fechaEmision
-          : fechaEmision // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      fechaVencimiento: null == fechaVencimiento
-          ? _value.fechaVencimiento
-          : fechaVencimiento // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      valorMensualidad: null == valorMensualidad
-          ? _value.valorMensualidad
-          : valorMensualidad // ignore: cast_nullable_to_non_nullable
-              as int,
-      valorMora: null == valorMora
-          ? _value.valorMora
-          : valorMora // ignore: cast_nullable_to_non_nullable
-              as int,
-      total: null == total
-          ? _value.total
-          : total // ignore: cast_nullable_to_non_nullable
-              as int,
-      estado: null == estado
-          ? _value.estado
-          : estado // ignore: cast_nullable_to_non_nullable
-              as EstadoFactura,
-      motivoAnulacion: freezed == motivoAnulacion
-          ? _value.motivoAnulacion
-          : motivoAnulacion // ignore: cast_nullable_to_non_nullable
-              as String?,
-      refacturadaEnId: freezed == refacturadaEnId
-          ? _value.refacturadaEnId
-          : refacturadaEnId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      updatedAt: freezed == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ));
+    return _then(
+      _$FacturaImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        tenantId: null == tenantId
+            ? _value.tenantId
+            : tenantId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        clienteId: null == clienteId
+            ? _value.clienteId
+            : clienteId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        numero: null == numero
+            ? _value.numero
+            : numero // ignore: cast_nullable_to_non_nullable
+                  as String,
+        periodo: null == periodo
+            ? _value.periodo
+            : periodo // ignore: cast_nullable_to_non_nullable
+                  as String,
+        tipo: null == tipo
+            ? _value.tipo
+            : tipo // ignore: cast_nullable_to_non_nullable
+                  as TipoFactura,
+        fechaEmision: null == fechaEmision
+            ? _value.fechaEmision
+            : fechaEmision // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        fechaVencimiento: null == fechaVencimiento
+            ? _value.fechaVencimiento
+            : fechaVencimiento // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        valorMensualidad: null == valorMensualidad
+            ? _value.valorMensualidad
+            : valorMensualidad // ignore: cast_nullable_to_non_nullable
+                  as int,
+        valorMora: null == valorMora
+            ? _value.valorMora
+            : valorMora // ignore: cast_nullable_to_non_nullable
+                  as int,
+        total: null == total
+            ? _value.total
+            : total // ignore: cast_nullable_to_non_nullable
+                  as int,
+        estado: null == estado
+            ? _value.estado
+            : estado // ignore: cast_nullable_to_non_nullable
+                  as EstadoFactura,
+        motivoAnulacion: freezed == motivoAnulacion
+            ? _value.motivoAnulacion
+            : motivoAnulacion // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        refacturadaEnId: freezed == refacturadaEnId
+            ? _value.refacturadaEnId
+            : refacturadaEnId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        createdAt: freezed == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        updatedAt: freezed == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$FacturaImpl extends _Factura {
-  const _$FacturaImpl(
-      {required this.id,
-      @JsonKey(name: 'tenant_id') required this.tenantId,
-      @JsonKey(name: 'cliente_id') required this.clienteId,
-      required this.numero,
-      required this.periodo,
-      @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson)
-      this.tipo = TipoFactura.mensual,
-      @JsonKey(name: 'fecha_emision') required this.fechaEmision,
-      @JsonKey(name: 'fecha_vencimiento') required this.fechaVencimiento,
-      @JsonKey(name: 'valor_mensualidad') this.valorMensualidad = 0,
-      @JsonKey(name: 'valor_mora') this.valorMora = 0,
-      required this.total,
-      @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
-      this.estado = EstadoFactura.pendiente,
-      @JsonKey(name: 'motivo_anulacion') this.motivoAnulacion,
-      @JsonKey(name: 'refacturada_en_id') this.refacturadaEnId,
-      @JsonKey(name: 'created_at') this.createdAt,
-      @JsonKey(name: 'updated_at') this.updatedAt})
-      : super._();
+  const _$FacturaImpl({
+    required this.id,
+    @JsonKey(name: 'tenant_id') required this.tenantId,
+    @JsonKey(name: 'cliente_id') required this.clienteId,
+    required this.numero,
+    required this.periodo,
+    @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson)
+    this.tipo = TipoFactura.mensual,
+    @JsonKey(name: 'fecha_emision') required this.fechaEmision,
+    @JsonKey(name: 'fecha_vencimiento') required this.fechaVencimiento,
+    @JsonKey(name: 'valor_mensualidad') this.valorMensualidad = 0,
+    @JsonKey(name: 'valor_mora') this.valorMora = 0,
+    required this.total,
+    @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
+    this.estado = EstadoFactura.pendiente,
+    @JsonKey(name: 'motivo_anulacion') this.motivoAnulacion,
+    @JsonKey(name: 'refacturada_en_id') this.refacturadaEnId,
+    @JsonKey(name: 'created_at') this.createdAt,
+    @JsonKey(name: 'updated_at') this.updatedAt,
+  }) : super._();
 
   factory _$FacturaImpl.fromJson(Map<String, dynamic> json) =>
       _$$FacturaImplFromJson(json);
@@ -415,23 +425,24 @@ class _$FacturaImpl extends _Factura {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      tenantId,
-      clienteId,
-      numero,
-      periodo,
-      tipo,
-      fechaEmision,
-      fechaVencimiento,
-      valorMensualidad,
-      valorMora,
-      total,
-      estado,
-      motivoAnulacion,
-      refacturadaEnId,
-      createdAt,
-      updatedAt);
+    runtimeType,
+    id,
+    tenantId,
+    clienteId,
+    numero,
+    periodo,
+    tipo,
+    fechaEmision,
+    fechaVencimiento,
+    valorMensualidad,
+    valorMora,
+    total,
+    estado,
+    motivoAnulacion,
+    refacturadaEnId,
+    createdAt,
+    updatedAt,
+  );
 
   @JsonKey(ignore: true)
   @override
@@ -441,33 +452,32 @@ class _$FacturaImpl extends _Factura {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$FacturaImplToJson(
-      this,
-    );
+    return _$$FacturaImplToJson(this);
   }
 }
 
 abstract class _Factura extends Factura {
-  const factory _Factura(
-      {required final String id,
-      @JsonKey(name: 'tenant_id') required final String tenantId,
-      @JsonKey(name: 'cliente_id') required final String clienteId,
-      required final String numero,
-      required final String periodo,
-      @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson)
-      final TipoFactura tipo,
-      @JsonKey(name: 'fecha_emision') required final DateTime fechaEmision,
-      @JsonKey(name: 'fecha_vencimiento')
-      required final DateTime fechaVencimiento,
-      @JsonKey(name: 'valor_mensualidad') final int valorMensualidad,
-      @JsonKey(name: 'valor_mora') final int valorMora,
-      required final int total,
-      @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
-      final EstadoFactura estado,
-      @JsonKey(name: 'motivo_anulacion') final String? motivoAnulacion,
-      @JsonKey(name: 'refacturada_en_id') final String? refacturadaEnId,
-      @JsonKey(name: 'created_at') final DateTime? createdAt,
-      @JsonKey(name: 'updated_at') final DateTime? updatedAt}) = _$FacturaImpl;
+  const factory _Factura({
+    required final String id,
+    @JsonKey(name: 'tenant_id') required final String tenantId,
+    @JsonKey(name: 'cliente_id') required final String clienteId,
+    required final String numero,
+    required final String periodo,
+    @JsonKey(fromJson: _tipoFromJson, toJson: _tipoToJson)
+    final TipoFactura tipo,
+    @JsonKey(name: 'fecha_emision') required final DateTime fechaEmision,
+    @JsonKey(name: 'fecha_vencimiento')
+    required final DateTime fechaVencimiento,
+    @JsonKey(name: 'valor_mensualidad') final int valorMensualidad,
+    @JsonKey(name: 'valor_mora') final int valorMora,
+    required final int total,
+    @JsonKey(fromJson: _estadoFromJson, toJson: _estadoToJson)
+    final EstadoFactura estado,
+    @JsonKey(name: 'motivo_anulacion') final String? motivoAnulacion,
+    @JsonKey(name: 'refacturada_en_id') final String? refacturadaEnId,
+    @JsonKey(name: 'created_at') final DateTime? createdAt,
+    @JsonKey(name: 'updated_at') final DateTime? updatedAt,
+  }) = _$FacturaImpl;
   const _Factura._() : super._();
 
   factory _Factura.fromJson(Map<String, dynamic> json) = _$FacturaImpl.fromJson;

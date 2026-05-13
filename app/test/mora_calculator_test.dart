@@ -124,15 +124,17 @@ void main() {
       expect(r, 29 * 300);
     });
 
-    test('Año NO bisiesto: deuda venc 2025-01-31, hasta 2025-03-01 → 28 días',
-        () {
-      final r = MoraCalculator.aCobrar(
-        deudas: [_d(vencimiento: DateTime(2025, 1, 31))],
-        hasta: DateTime(2025, 3, 1),
-        tarifaMoraDiaria: 300,
-      );
-      expect(r, 28 * 300);
-    });
+    test(
+      'Año NO bisiesto: deuda venc 2025-01-31, hasta 2025-03-01 → 28 días',
+      () {
+        final r = MoraCalculator.aCobrar(
+          deudas: [_d(vencimiento: DateTime(2025, 1, 31))],
+          hasta: DateTime(2025, 3, 1),
+          tarifaMoraDiaria: 300,
+        );
+        expect(r, 28 * 300);
+      },
+    );
   });
 
   group('MoraCalculator.descomponer', () {

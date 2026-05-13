@@ -52,7 +52,10 @@ class FestivosColombia {
   /// El día de vencimiento no cuenta: el primer día posible es el siguiente
   /// calendario. Así un cliente con factura que vence hoy tiene 0 días hábiles
   /// de mora (aún no entra en reporte de morosos).
-  static int diasHabilesTrasVencimiento(DateTime fechaVencimiento, DateTime hoy) {
+  static int diasHabilesTrasVencimiento(
+    DateTime fechaVencimiento,
+    DateTime hoy,
+  ) {
     final v = DateTime(
       fechaVencimiento.year,
       fechaVencimiento.month,

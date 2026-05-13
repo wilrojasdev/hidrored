@@ -81,60 +81,216 @@ class _DetailBody extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Wrap(
-                      spacing: AppSpacing.lg,
-                      runSpacing: AppSpacing.sm,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        Text(
-                          factura.numero,
-                          style: theme.textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        StatusChip(
-                          label: factura.estado.label,
-                          variant: factura.estado.variant,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Periodo ${formatPeriodo(factura.periodo)} · '
-                      '${factura.tipo.label}',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    AsyncValueWidget<Cliente>(
-                      value: asyncCliente,
-                      data: (s) => Row(
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(
-                            Icons.person_outline,
-                            color: theme.colorScheme.primary,
+                          Wrap(
+                            spacing: AppSpacing.lg,
+                            runSpacing: AppSpacing.sm,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Text(
+                                factura.numero,
+                                style: theme.textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              StatusChip(
+                                label: factura.estado.label,
+                                variant: factura.estado.variant,
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          const SizedBox(height: 4),
+                          Text(
+                            'Periodo ${formatPeriodo(factura.periodo)} · '
+                            '${factura.tipo.label}',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          AsyncValueWidget<Cliente>(
+                            value: asyncCliente,
+                            data: (s) => Row(
                               children: [
-                                Text(
-                                  s.nombre,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
+                                Icon(
+                                  Icons.person_outline,
+                                  color: theme.colorScheme.primary,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        s.nombre,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${formatCedula(s.cedula)}${s.direccion == null ? '' : ' · ${s.direccion}'}',
+                                        style: theme.textTheme.bodySmall,
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                Text(
-                                  '${formatCedula(s.cedula)}${s.direccion == null ? '' : ' · ${s.direccion}'}',
-                                  style: theme.textTheme.bodySmall,
+                              ],
+                            ),
+                          ),
+                          const Divider(height: 32),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _Field(
+                                  label: 'Emisión',
+                                  value: formatFecha(factura.fechaEmision),
+                                ),
+                              ),
+                              Expanded(
+                                child: _Field(
+                                  label: 'Vencimiento',
+                                  value: formatFecha(factura.fechaVencimiento),
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (factura.estado == EstadoFactura.anulada &&
+                              factura.motivoAnulacion != null) ...[
+                            const SizedBox(height: 12),
+                            _Field(
+                              label: 'Motivo de anulación',
+                              value: factura.motivoAnulacion!,
+                            ),
+                          ],
+                          if (factura.estado == EstadoFactura.refacturada) ...[
+                            const SizedBox(height: 12),
+                            Container(
+                              padding: const EdgeInsets.all(AppSpacing.md),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.secondaryContainer,
+                                borderRadius: BorderRadius.circular(
+                                  AppSizes.radiusSm,
+                                ),
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.merge_type,
+                                    color:
+                                        theme.colorScheme.onSecondaryContainer,
+                                  ),
+                                  const SizedBox(width: AppSpacing.md),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Esta factura fue refacturada',
+                                          style: theme.textTheme.titleSmall
+                                              ?.copyWith(
+                                                color: theme
+                                                    .colorScheme
+                                                    .onSecondaryContainer,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          'Su saldo se cobró en una factura '
+                                          'posterior. No recibe nuevos pagos. '
+                                          'Si necesitas revertir, anula la '
+                                          'factura que la absorbió.',
+                                          style: theme.textTheme.bodySmall
+                                              ?.copyWith(
+                                                color: theme
+                                                    .colorScheme
+                                                    .onSecondaryContainer,
+                                              ),
+                                        ),
+                                        if (factura.refacturadaEnId !=
+                                            null) ...[
+                                          const SizedBox(height: 8),
+                                          InkWell(
+                                            onTap: () => context.go(
+                                              '/facturas/${factura.refacturadaEnId}',
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(
+                                                  Icons.arrow_forward,
+                                                  size: 14,
+                                                  color: theme
+                                                      .colorScheme
+                                                      .onSecondaryContainer,
+                                                ),
+                                                const SizedBox(width: 4),
+                                                Text(
+                                                  'Ver factura que la absorbió',
+                                                  style: TextStyle(
+                                                    color: theme
+                                                        .colorScheme
+                                                        .onSecondaryContainer,
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Conceptos', style: theme.textTheme.titleMedium),
+                          const SizedBox(height: 12),
+                          AsyncValueWidget<List<FacturaLinea>>(
+                            value: asyncLineas,
+                            data: (lineas) => Column(
+                              children: [
+                                for (final l in lineas) _LineaRow(linea: l),
+                                const Divider(height: 24),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Total',
+                                      style: theme.textTheme.titleMedium,
+                                    ),
+                                    Text(
+                                      formatPesos(factura.total),
+                                      style: theme.textTheme.titleLarge
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                            color: theme.colorScheme.primary,
+                                          ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -142,197 +298,61 @@ class _DetailBody extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    const Divider(height: 32),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _Field(
-                            label: 'Emisión',
-                            value: formatFecha(factura.fechaEmision),
-                          ),
-                        ),
-                        Expanded(
-                          child: _Field(
-                            label: 'Vencimiento',
-                            value: formatFecha(factura.fechaVencimiento),
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (factura.estado == EstadoFactura.anulada &&
-                        factura.motivoAnulacion != null) ...[
-                      const SizedBox(height: 12),
-                      _Field(
-                        label: 'Motivo de anulación',
-                        value: factura.motivoAnulacion!,
-                      ),
-                    ],
-                    if (factura.estado == EstadoFactura.refacturada) ...[
-                      const SizedBox(height: 12),
-                      Container(
-                        padding: const EdgeInsets.all(AppSpacing.md),
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.secondaryContainer,
-                          borderRadius: BorderRadius.circular(
-                            AppSizes.radiusSm,
-                          ),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.merge_type,
-                              color: theme.colorScheme.onSecondaryContainer,
-                            ),
-                            const SizedBox(width: AppSpacing.md),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Esta factura fue refacturada',
-                                    style: theme.textTheme.titleSmall?.copyWith(
-                                      color: theme
-                                          .colorScheme
-                                          .onSecondaryContainer,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    'Su saldo se cobró en una factura '
-                                    'posterior. No recibe nuevos pagos. '
-                                    'Si necesitas revertir, anula la '
-                                    'factura que la absorbió.',
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme
-                                          .colorScheme
-                                          .onSecondaryContainer,
-                                    ),
-                                  ),
-                                  if (factura.refacturadaEnId != null) ...[
-                                    const SizedBox(height: 8),
-                                    InkWell(
-                                      onTap: () => context.go(
-                                        '/facturas/${factura.refacturadaEnId}',
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.arrow_forward,
-                                            size: 14,
-                                            color: theme
-                                                .colorScheme
-                                                .onSecondaryContainer,
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Text(
-                                            'Ver factura que la absorbió',
-                                            style: TextStyle(
-                                              color: theme
-                                                  .colorScheme
-                                                  .onSecondaryContainer,
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Conceptos', style: theme.textTheme.titleMedium),
-                    const SizedBox(height: 12),
-                    AsyncValueWidget<List<FacturaLinea>>(
-                      value: asyncLineas,
-                      data: (lineas) => Column(
-                        children: [
-                          for (final l in lineas) _LineaRow(linea: l),
-                          const Divider(height: 24),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Total', style: theme.textTheme.titleMedium),
-                              Text(
-                                formatPesos(factura.total),
-                                style: theme.textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: theme.colorScheme.primary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: [
-                FilledButton.tonalIcon(
-                  onPressed: () =>
-                      ReciboActions.imprimirIndividual(context, ref, factura),
-                  icon: const Icon(Icons.print_outlined),
-                  label: const Text('Imprimir / Vista previa'),
-                ),
-                OutlinedButton.icon(
-                  onPressed: () =>
-                      ReciboActions.compartirIndividual(context, ref, factura),
-                  icon: const Icon(Icons.share_outlined),
-                  label: const Text('Compartir PDF'),
-                ),
-                OutlinedButton.icon(
-                  onPressed: () =>
-                      ReciboActions.mensajeWhatsApp(context, ref, factura),
-                  icon: const Icon(Icons.chat_outlined),
-                  label: const Text('Mensaje WhatsApp'),
-                ),
-                if (factura.estado == EstadoFactura.pendiente)
-                  OutlinedButton.icon(
-                    onPressed: () => _anular(context, ref),
-                    icon: const Icon(Icons.cancel_outlined),
-                    label: const Text('Anular factura'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: theme.colorScheme.error,
-                    ),
                   ),
-                if (factura.estado == EstadoFactura.anulada)
-                  FilledButton.icon(
-                    onPressed: () => context.go(
-                      '/facturas/individual/${factura.clienteId}'
-                      '?periodo=${factura.periodo}',
-                    ),
-                    icon: const Icon(Icons.replay),
-                    label: const Text('Re-emitir factura'),
+                  const SizedBox(height: 16),
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: [
+                      FilledButton.tonalIcon(
+                        onPressed: () => ReciboActions.imprimirIndividual(
+                          context,
+                          ref,
+                          factura,
+                        ),
+                        icon: const Icon(Icons.print_outlined),
+                        label: const Text('Imprimir / Vista previa'),
+                      ),
+                      OutlinedButton.icon(
+                        onPressed: () => ReciboActions.compartirIndividual(
+                          context,
+                          ref,
+                          factura,
+                        ),
+                        icon: const Icon(Icons.share_outlined),
+                        label: const Text('Compartir PDF'),
+                      ),
+                      OutlinedButton.icon(
+                        onPressed: () => ReciboActions.mensajeWhatsApp(
+                          context,
+                          ref,
+                          factura,
+                        ),
+                        icon: const Icon(Icons.chat_outlined),
+                        label: const Text('Mensaje WhatsApp'),
+                      ),
+                      if (factura.estado == EstadoFactura.pendiente)
+                        OutlinedButton.icon(
+                          onPressed: () => _anular(context, ref),
+                          icon: const Icon(Icons.cancel_outlined),
+                          label: const Text('Anular factura'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: theme.colorScheme.error,
+                          ),
+                        ),
+                      if (factura.estado == EstadoFactura.anulada)
+                        FilledButton.icon(
+                          onPressed: () => context.go(
+                            '/facturas/individual/${factura.clienteId}'
+                            '?periodo=${factura.periodo}',
+                          ),
+                          icon: const Icon(Icons.replay),
+                          label: const Text('Re-emitir factura'),
+                        ),
+                    ],
                   ),
-              ],
-            ),
-          ],
-        ),
+                ],
+              ),
             ),
           ),
         );
