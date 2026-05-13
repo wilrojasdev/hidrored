@@ -25,7 +25,7 @@ class TenantLogo extends StatelessWidget {
           assetPath,
           fit: BoxFit.contain,
           gaplessPlayback: true,
-          errorBuilder: (_, __, ___) => _Fallback(size: size, borderRadius: r),
+          errorBuilder: (_, _, _) => _Fallback(size: size, borderRadius: r),
         ),
       ),
     );

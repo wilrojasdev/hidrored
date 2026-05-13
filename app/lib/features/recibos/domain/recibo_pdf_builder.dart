@@ -307,7 +307,7 @@ class ReciboPdfBuilder {
         else ...[
           pw.Spacer(),
           pw.Container(
-            decoration: pw.BoxDecoration(
+            decoration: const pw.BoxDecoration(
               border: pw.Border(top: pw.BorderSide(color: _brand, width: 0.5)),
             ),
             padding: pw.EdgeInsets.only(top: 6 * escala),
@@ -332,7 +332,7 @@ class ReciboPdfBuilder {
   ) {
     return pw.Container(
       padding: pw.EdgeInsets.only(bottom: 8 * escala),
-      decoration: pw.BoxDecoration(
+      decoration: const pw.BoxDecoration(
         border: pw.Border(bottom: pw.BorderSide(color: _brand, width: 2)),
       ),
       child: pw.Row(
@@ -432,7 +432,7 @@ class ReciboPdfBuilder {
           horizontal: 6 * escala,
           vertical: 4 * escala,
         ),
-        decoration: pw.BoxDecoration(color: _brandDark),
+        decoration: const pw.BoxDecoration(color: _brandDark),
         child: pw.Center(child: pw.Text('MEDIOS DE PAGO', style: titulo)),
       ),
     ];
@@ -565,7 +565,7 @@ class ReciboPdfBuilder {
           horizontal: 10 * escala,
           vertical: 8 * escala,
         ),
-        decoration: pw.BoxDecoration(
+        decoration: const pw.BoxDecoration(
           color: _brandDark,
           borderRadius: pw.BorderRadius.only(
             topLeft: pw.Radius.circular(5),
@@ -597,7 +597,7 @@ class ReciboPdfBuilder {
             escala: escala,
             fontPequeno: fontPequeno,
             fontTexto: fontTexto,
-            acento: PdfColor(0.86, 0.25, 0.20),
+            acento: const PdfColor(0.86, 0.25, 0.20),
           ),
         );
       }
@@ -615,7 +615,7 @@ class ReciboPdfBuilder {
             escala: escala,
             fontPequeno: fontPequeno,
             fontTexto: fontTexto,
-            acento: PdfColor(0.55, 0.08, 0.58),
+            acento: const PdfColor(0.55, 0.08, 0.58),
           ),
         );
       }
@@ -771,7 +771,7 @@ class ReciboPdfBuilder {
       border: pw.TableBorder.all(color: _brand, width: 0.5),
       children: [
         pw.TableRow(
-          decoration: pw.BoxDecoration(color: _surfaceStrong),
+          decoration: const pw.BoxDecoration(color: _surfaceStrong),
           children: [
             for (final h in headers)
               pw.Padding(
@@ -835,7 +835,7 @@ class ReciboPdfBuilder {
       },
       children: [
         pw.TableRow(
-          decoration: pw.BoxDecoration(color: _brand),
+          decoration: const pw.BoxDecoration(color: _brand),
           children: [
             _cell('Concepto', font, bold: true, light: true),
             _cell('Cant.', font, bold: true, center: true, light: true),
