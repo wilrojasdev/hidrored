@@ -29,12 +29,18 @@ void main() {
     expect(s, contains('25'));
   });
 
-  test('formatFechaLargaHora: incluye hora 12 h con minutos', () {
+  test('formatFechaLargaHora: hora en 12 h con minutos (no 24 h)', () {
     final fecha = DateTime(2025, 3, 25);
-    final reg = DateTime(2025, 3, 25, 9, 7);
+    // Tarde: en 24 h sería 15:09; en 12 h debe ser 3:09 (con sufijo de mediodía).
+    final reg = DateTime(2025, 3, 25, 15, 9);
     final full = formatFechaLargaHora(fecha, horaRegistro: reg);
-    expect(full, contains('9:07'));
-    expect(full.toLowerCase(), contains('a.'));
-    expect(full.toLowerCase(), contains('m.'));
+    expect(full.toLowerCase(), contains('marzo'));
+    expect(full, contains(','));
+    expect(full, isNot(contains('15:09')));
+    expect(
+      RegExp(r'[, ]\s*0?3:09').hasMatch(full),
+      isTrue,
+      reason: 'Se esperaba hora tipo 3:09 en 12 h, se obtuvo: $full',
+    );
   });
 }
